@@ -1,25 +1,29 @@
 'use client';
 
-import { useState as state } from 'react';
+import { useState as state} from 'react';
+import { cn } from '@/lib/utils';
 
 export default function Header() {
   const [search, $search] = state('');
 
   return (
     <>
-      {search && (
-        <div className="fixed inset-0 bg-black/50 z-40" onClick={() => { $search('closing'); setTimeout(() => $search(''), 250); }}></div>
-      )}
+      <div className={cn(
+                      'fixed inset-0 bg-black/50 z-40 transition-opacity duration-500',
+                      search ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                    )}
+           onClick={() => { $search('closing'); setTimeout(() => $search(''), 250); }}></div>
 
       <header className="w-full 
                          py-5">
-        <div className="relative
+        <div className={`relative
                         mx-auto
                         w-fit
                         z-50
+                        transition-all duration-250
                         grid
                         grid-cols-[50px_170px_600px_auto]
-                        gap-2.5">
+                        gap-2.5`}>
           <div className="col-span-4
                           grid
                           grid-cols-subgrid
@@ -35,9 +39,9 @@ export default function Header() {
               className="flex-shrink-0
                          p-2.5
                          text-black hover:text-orange active:text-orange
-                         transition-colors duration-300">
+                         transition-colors duration-250">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>
 
@@ -48,27 +52,25 @@ export default function Header() {
                          text-xl font-bold text-black hover:text-orange active:text-orange
                          border-y 
                          border-black hover:border-orange active:border-orange
-                         transition-colors duration-300">
+                         transition-colors duration-250">
               Kingdom's Kids
             </a>
 
-            <div className={`flex
-                            items-center
-                            justify-end
-                            ${search ? 'gap-0' : 'gap-2.5'}
-                            w-150`}>
-              <nav className={`flex
-                              items-center
-                              gap-2.5
-                              ${search ? 'w-0 opacity-0' : 'w-auto opacity-100'}
-                              transition-all duration-500`}>
+            <div className={cn(
+                            'flex items-center justify-end w-150',
+                            search ? 'gap-0' : 'gap-2.5'
+                          )}>
+              <nav className={cn(
+                              'flex items-center gap-2.5 transition-all duration-500',
+                              search ? 'w-0 opacity-0' : 'w-auto opacity-100'
+                            )}>
                 <a
                   href=""
                   className="select-none inline-block whitespace-nowrap
                              px-5 py-2.5
                              font-medium text-black hover:text-orange active:text-orange
                              bg-transparent hover:bg-transparent active:bg-transparent
-                             transition-colors duration-300"
+                             transition-colors duration-250"
                 >
                   Testimonies
                 </a>
@@ -78,17 +80,18 @@ export default function Header() {
                              px-5 py-2.5
                              font-medium text-black hover:text-orange active:text-orange
                              bg-transparent hover:bg-transparent active:bg-transparent
-                             transition-colors duration-300"
+                             transition-colors duration-250"
                 >
                   Gallery
                 </a>
               </nav>
 
-              <div className={`relative
-                              ${search === 'active' ? 'w-full' : 'w-100'}
-                              transition-all duration-250 `}>
+              <div className={cn(
+                              'relative transition-all duration-250',
+                              search === 'active' ? 'w-full' : 'w-100'
+                            )}>
                 <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-black ac pointer-events-none" fill="none" stroke="black" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
                 <input
                   type="search"
@@ -118,7 +121,7 @@ export default function Header() {
                            border 
                            border-black hover:border-orange active:border-orange 
                            rounded-lg
-                           transition-colors duration-300"
+                           transition-colors duration-250"
               >
                 Donate
               </a>
@@ -132,84 +135,118 @@ export default function Header() {
                            border 
                            border-black hover:border-transparent active:border-transparent
                            rounded-lg
-                           transition-colors duration-300"
+                           transition-colors duration-250"
               >
                 Volunteer
               </a>
             </div>
 
-            {search && (
-              <>
-                <div className="col-start-3 justify-self-start">
-                  <input type="radio" name="dropdown" id="option1" defaultChecked className="peer/option0 hidden" />
+            <div className="contents">
+                <div className={cn(
+                                'col-start-3 justify-self-start',
+                                search === 'active'
+                                  ? 'opacity-100 transition-opacity delay-100 duration-300'
+                                  : 'opacity-0 transition-none pointer-events-none '
+                              )}>
+                  <input type="radio" name="dropdown" id="option0" defaultChecked className="peer/option0 hidden" />
+                  <label
+                    htmlFor="option0"
+                    className="block
+                               relative
+                               select-none
+                               pl-10 pr-5 py-2.5
+                               font-medium text-black peer-checked/option0:font-bold
+                               bg-transparent peer-checked/option0:bg-white
+                               hover:bg-white
+                               transition-colors duration-250
+                               rounded-lg
+                               cursor-pointer">
+                    <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-black pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
+                    </svg>
+                    Lessons
+                  </label>
+                </div>
+
+                <div className={cn(
+                                'col-start-3 justify-self-start',
+                                search === 'active'
+                                  ? 'opacity-100 delay-100 duration-300 transition-opacity'
+                                  : 'opacity-0 pointer-events-none transition-none'
+                              )}>
+                  <input type="radio" name="dropdown" id="option1" className="peer/option1 hidden" />
                   <label
                     htmlFor="option1"
                     className="block
+                               relative
                                select-none
-                               px-5 py-2.5
+                               pl-10 pr-5 py-2.5
                                font-medium text-black peer-checked/option1:font-bold
-                               bg-transparent peer-checked/option0:bg-white
+                               bg-transparent peer-checked/option1:bg-white
                                hover:bg-white
-                               transition-colors duration-300
+                               transition-colors duration-250
                                rounded-lg
                                cursor-pointer">
-                    Placeholder
+                    <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-black pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="m9 9 10.5-3m0 6.553v3.75a2.25 2.25 0 0 1-1.632 2.163l-1.32.377a1.803 1.803 0 1 1-.99-3.467l2.31-.66a2.25 2.25 0 0 0 1.632-2.163Zm0 0V2.25L9 5.25v10.303m0 0v3.75a2.25 2.25 0 0 1-1.632 2.163l-1.32.377a1.803 1.803 0 0 1-.99-3.467l2.31-.66A2.25 2.25 0 0 0 9 15.553Z" />
+                    </svg>
+                    Songs
                   </label>
                 </div>
 
-                <div className="col-start-3 justify-self-start">
-                  <input type="radio" name="dropdown" id="option2" className="peer/option1 hidden" />
+                <div className={cn(
+                                'col-start-3 justify-self-start',
+                                search === 'active'
+                                  ? 'opacity-100 delay-100 duration-300 transition-opacity'
+                                  : 'opacity-0 pointer-events-none transition-none'
+                              )}>
+                  <input type="radio" name="dropdown" id="option2" className="peer/option2 hidden" />
                   <label
                     htmlFor="option2"
                     className="block
+                               relative
                                select-none
-                               px-5 py-2.5
+                               pl-10 pr-5 py-2.5
                                font-medium text-black peer-checked/option2:font-bold
-                               bg-transparent peer-checked/option1:bg-white
+                               bg-transparent peer-checked/option2:bg-white
                                hover:bg-white
-                               transition-colors duration-300
+                               transition-colors duration-250
                                rounded-lg
                                cursor-pointer">
-                    Placeholder
+                    <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-black pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" strokeWidth={1.5} d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z"/>
+                    </svg>
+                    
+                    Games
                   </label>
                 </div>
 
-                <div className="col-start-3 justify-self-start">
-                  <input type="radio" name="dropdown" id="option3" className="peer/option2 hidden" />
+                <div className={cn(
+                                'col-start-3 justify-self-start',
+                                search === 'active'
+                                  ? 'opacity-100 delay-100 duration-300 transition-opacity'
+                                  : 'opacity-0 pointer-events-none transition-none'
+                              )}>
+                  <input type="radio" name="dropdown" id="option3" className="peer/option3 hidden" />
                   <label
                     htmlFor="option3"
                     className="block
+                               relative
                                select-none
-                               px-5 py-2.5
+                               pl-10 px-5 py-2.5
                                font-medium text-black peer-checked/option3:font-bold
-                               bg-transparent peer-checked/option2:bg-white
-                               hover:bg-white
-                               transition-colors duration-300
-                               rounded-lg
-                               cursor-pointer">
-                    Placeholder
-                  </label>
-                </div>
-
-                <div className="col-start-3 justify-self-start">
-                  <input type="radio" name="dropdown" id="option4" className="peer/option3 hidden" />
-                  <label
-                    htmlFor="option4"
-                    className="block
-                               select-none
-                               px-5 py-2.5
-                               font-medium text-black peer-checked/option4:font-bold
                                bg-transparent peer-checked/option3:bg-white
                                hover:bg-white
-                               transition-colors duration-300
+                               transition-colors duration-250
                                rounded-lg
                                cursor-pointer">
-                    Placeholder
+                    <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-black pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" strokeWidth={1.5} d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z"/>
+                    </svg>
+                    Resources
                   </label>
                 </div>
-              </>
-
-            )}
+              </div>
 
           </div>
 
