@@ -12,27 +12,20 @@ export default function Header() {
                       'fixed inset-0 bg-black/50 z-40 transition-opacity duration-500',
                       search ? 'opacity-100' : 'opacity-0 pointer-events-none'
                     )}
-           onClick={() => { $search('closing'); setTimeout(() => $search(''), 250); }}></div>
+           onClick={() => { $search('closing'); setTimeout(() => $search(''), 300); }}></div>
 
       <header className="w-full 
                          py-5">
-        <div className={`relative
-                        mx-auto
-                        w-fit
-                        z-50
-                        transition-all duration-250
-                        grid
-                        grid-cols-[50px_170px_600px_auto]
-                        gap-2.5`}>
-          <div className="col-span-4
-                          grid
-                          grid-cols-subgrid
+        <div className="relative mx-auto w-fit z-50">
+          <div className="grid
+                          grid-cols-[auto_auto_auto_auto]
                           p-2.5
                           gap-2.5
                           bg-off-white
                           border
                           border-transparent
-                          rounded-lg">
+                          rounded-lg
+                          transition-all duration-250">
 
             <button
               onClick={() => $search('active')}
@@ -57,8 +50,8 @@ export default function Header() {
             </a>
 
             <div className={cn(
-                            'flex items-center justify-end w-150',
-                            search ? 'gap-0' : 'gap-2.5'
+                            'flex items-center justify-end w-150 transition-all duration-250',
+                            search === 'active' ? 'gap-0' : 'gap-2.5'
                           )}>
               <nav className={cn(
                               'flex items-center gap-2.5 transition-all duration-500',
@@ -87,10 +80,10 @@ export default function Header() {
               </nav>
 
               <div className={cn(
-                              'relative transition-all duration-250',
-                              search === 'active' ? 'w-full' : 'w-100'
+                              'relative transition-all duration-250 group',
+                              search === 'active' ? 'w-full' : 'w-[390px]'
                             )}>
-                <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-black ac pointer-events-none" fill="none" stroke="black" viewBox="0 0 24 24">
+                <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-black group-hover:text-orange transition-colors duration-250 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
                 <input
@@ -104,7 +97,7 @@ export default function Header() {
                              selection:bg-orange selection:text-white
                              bg-white
                              rounded-lg
-                             focus:outline-1 focus:outline-orange"
+                             focus:outline-1 focus:outline-transparent"
                 />
               </div>
             </div>
@@ -146,22 +139,25 @@ export default function Header() {
                                 'col-start-3 justify-self-start',
                                 search === 'active'
                                   ? 'opacity-100 transition-opacity delay-100 duration-300'
-                                  : 'opacity-0 transition-none pointer-events-none '
+                                  : search === 'closing'
+                                  ? 'opacity-0 transition-opacity pointer-events-none duration-300'
+                                  : 'opacity-0 transition-none pointer-events-none'
                               )}>
-                  <input type="radio" name="dropdown" id="option0" defaultChecked className="peer/option0 hidden" />
+                  <input type="radio" name="dropdown" id="lessons" defaultChecked className="peer/lessons hidden" />
                   <label
-                    htmlFor="option0"
+                    htmlFor="lessons"
                     className="block
                                relative
                                select-none
-                               pl-10 pr-5 py-2.5
-                               font-medium text-black peer-checked/option0:font-bold
-                               bg-transparent peer-checked/option0:bg-white
+                               w-30 pl-10 pr-5 py-2.5
+                               font-medium peer-checked/lessons:font-bold text-black
+                               bg-transparent peer-checked/lessons:bg-white
                                hover:bg-white
                                transition-colors duration-250
                                rounded-lg
-                               cursor-pointer">
-                    <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-black pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                               cursor-pointer
+                               group">
+                    <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-black group-hover:text-orange transition-colors duration-250 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
                     </svg>
                     Lessons
@@ -172,22 +168,25 @@ export default function Header() {
                                 'col-start-3 justify-self-start',
                                 search === 'active'
                                   ? 'opacity-100 delay-100 duration-300 transition-opacity'
+                                  : search === 'closing'
+                                  ? 'opacity-0 transition-opacity pointer-events-none duration-300'
                                   : 'opacity-0 pointer-events-none transition-none'
                               )}>
-                  <input type="radio" name="dropdown" id="option1" className="peer/option1 hidden" />
+                  <input type="radio" name="dropdown" id="songs" className="peer/songs hidden" />
                   <label
-                    htmlFor="option1"
+                    htmlFor="songs"
                     className="block
                                relative
                                select-none
-                               pl-10 pr-5 py-2.5
-                               font-medium text-black peer-checked/option1:font-bold
-                               bg-transparent peer-checked/option1:bg-white
+                               w-30 pl-10 pr-5 py-2.5
+                               font-medium peer-checked/songs:font-bold text-black
+                               bg-transparent peer-checked/songs:bg-white
                                hover:bg-white
                                transition-colors duration-250
                                rounded-lg
-                               cursor-pointer">
-                    <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-black pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                               cursor-pointer
+                               group">
+                    <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-black group-hover:text-orange transition-colors duration-250 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="m9 9 10.5-3m0 6.553v3.75a2.25 2.25 0 0 1-1.632 2.163l-1.32.377a1.803 1.803 0 1 1-.99-3.467l2.31-.66a2.25 2.25 0 0 0 1.632-2.163Zm0 0V2.25L9 5.25v10.303m0 0v3.75a2.25 2.25 0 0 1-1.632 2.163l-1.32.377a1.803 1.803 0 0 1-.99-3.467l2.31-.66A2.25 2.25 0 0 0 9 15.553Z" />
                     </svg>
                     Songs
@@ -198,25 +197,28 @@ export default function Header() {
                                 'col-start-3 justify-self-start',
                                 search === 'active'
                                   ? 'opacity-100 delay-100 duration-300 transition-opacity'
+                                  : search === 'closing'
+                                  ? 'opacity-0 transition-opacity pointer-events-none duration-300'
                                   : 'opacity-0 pointer-events-none transition-none'
                               )}>
-                  <input type="radio" name="dropdown" id="option2" className="peer/option2 hidden" />
+                  <input type="radio" name="dropdown" id="games" className="peer/games hidden" />
                   <label
-                    htmlFor="option2"
+                    htmlFor="games"
                     className="block
                                relative
                                select-none
-                               pl-10 pr-5 py-2.5
-                               font-medium text-black peer-checked/option2:font-bold
-                               bg-transparent peer-checked/option2:bg-white
+                               w-30 pl-10 pr-5 py-2.5
+                               font-medium peer-checked/games:font-bold text-black
+                               bg-transparent peer-checked/games:bg-white
                                hover:bg-white
                                transition-colors duration-250
                                rounded-lg
-                               cursor-pointer">
-                    <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-black pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" strokeWidth={1.5} d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z"/>
+                               cursor-pointer
+                               group">
+                    <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-black group-hover:text-orange transition-colors duration-250 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z"/>
                     </svg>
-                    
+
                     Games
                   </label>
                 </div>
@@ -225,23 +227,26 @@ export default function Header() {
                                 'col-start-3 justify-self-start',
                                 search === 'active'
                                   ? 'opacity-100 delay-100 duration-300 transition-opacity'
+                                  : search === 'closing'
+                                  ? 'opacity-0 transition-opacity pointer-events-none duration-300'
                                   : 'opacity-0 pointer-events-none transition-none'
                               )}>
-                  <input type="radio" name="dropdown" id="option3" className="peer/option3 hidden" />
+                  <input type="radio" name="dropdown" id="resources" className="peer/resources hidden" />
                   <label
-                    htmlFor="option3"
+                    htmlFor="resources"
                     className="block
                                relative
                                select-none
-                               pl-10 px-5 py-2.5
-                               font-medium text-black peer-checked/option3:font-bold
-                               bg-transparent peer-checked/option3:bg-white
+                               w-30 pl-10 pr-5 py-2.5
+                               font-medium peer-checked/resources:font-bold text-black
+                               bg-transparent peer-checked/resources:bg-white
                                hover:bg-white
                                transition-colors duration-250
                                rounded-lg
-                               cursor-pointer">
-                    <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-black pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" strokeWidth={1.5} d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z"/>
+                               cursor-pointer
+                               group">
+                    <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-black group-hover:text-orange transition-colors duration-250 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z"/>
                     </svg>
                     Resources
                   </label>
