@@ -2,11 +2,11 @@
 
 <div align="center">
 
-![Kingdom's Kids](https://img.shields.io/badge/Kingdom's_Kids-Faith_Based_Platform-gold? style=for-the-badge)
-![Next.js](https://img.shields.io/badge/Next. js-16.0.2-black?style=for-the-badge&logo=next.js)
+![Kingdom's Kids](https://img.shields.io/badge/Kingdom's_Kids-Faith_Based_Platform-gold?style=for-the-badge)
+![Next.js](https://img.shields.io/badge/Next.js-16.0.2-black?style=for-the-badge&logo=next.js)
 ![React](https://img.shields.io/badge/React-19.2.0-61DAFB?style=for-the-badge&logo=react)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=for-the-badge&logo=typescript)
-![Tailwind CSS](https://img.shields. io/badge/Tailwind_CSS-4.x-06B6D4? style=for-the-badge&logo=tailwindcss)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.x-06B6D4?style=for-the-badge&logo=tailwindcss)
 
 **🌟 Nurturing Faith, Inspiring Young Hearts 🌟**
 
@@ -37,16 +37,16 @@
 ### Frontend Framework
 | Technology | Version | Purpose |
 |------------|---------|---------|
-| [Next.js](https://nextjs.org/) | 16. 0.2 | React framework with App Router |
-| [React](https://react.dev/) | 19. 2.0 | UI library |
-| [TypeScript](https://www. typescriptlang.org/) | 5.x | Type-safe JavaScript |
+| [Next.js](https://nextjs.org/) | 16.0.2 | React framework with App Router |
+| [React](https://react.dev/) | 19.2.0 | UI library |
+| [TypeScript](https://www.typescriptlang.org/) | 5.x | Type-safe JavaScript |
 
 ### Styling & UI
 | Technology | Version | Purpose |
 |------------|---------|---------|
 | [Tailwind CSS](https://tailwindcss.com/) | 4.x | Utility-first CSS framework |
 | [Radix UI](https://www.radix-ui.com/) | Latest | Accessible component primitives |
-| [Lucide React](https://lucide. dev/) | 0.554.0 | Beautiful icon library |
+| [Lucide React](https://lucide.dev/) | 0.554.0 | Beautiful icon library |
 | [React Icons](https://react-icons.github.io/react-icons/) | 5.5.0 | Popular icon packs |
 
 ### Animation & Interactions
@@ -79,7 +79,7 @@ kingdomskids/
 │   ├── 📂 icons/              # Custom icon components
 │   ├── 📂 ui/                 # Reusable UI components
 │   ├── 📄 Header.tsx          # Main header component
-│   ├── 📄 Header1. tsx         # Alternative header variant
+│   ├── 📄 Header1.tsx         # Alternative header variant
 │   ├── 📄 Header3.tsx         # Header variant 3
 │   ├── 📄 Footer.tsx          # Footer component
 │   └── 📄 Scroll.tsx          # Smooth scroll wrapper
@@ -165,7 +165,7 @@ Ensure you have the following installed:
 - [ ] **Worship Music Player** - Curated playlists for kids
 - [ ] **Character Avatars** - Customizable profiles
 
-### 🎯 Version 0. 4.0 - Community Features (Q3 2026)
+### 🎯 Version 0.4.0 - Community Features (Q3 2026)
 - [ ] **Church Integration** - Connect with local churches
 - [ ] **Group Challenges** - Sunday school competitions
 - [ ] **Family Devotionals** - Guided family worship time
@@ -239,7 +239,7 @@ This project is currently unlicensed. Please contact the maintainers for usage p
 - [Next.js Team](https://nextjs.org/) for the amazing framework
 - [Vercel](https://vercel.com/) for hosting and deployment
 - [Radix UI](https://www.radix-ui.com/) for accessible components
-- [Tailwind CSS](https://tailwindcss. com/) for the utility-first approach
+- [Tailwind CSS](https://tailwindcss.com/) for the utility-first approach
 - All contributors and supporters of this ministry
 
 ---
@@ -254,7 +254,7 @@ This project is currently unlicensed. Please contact the maintainers for usage p
 
 Made with ❤️ and ✝️ for the Kingdom
 
-![Stars](https://img. shields.io/github/stars/lhunyadi/kingdomskids?style=social)
-![Forks](https://img. shields.io/github/forks/lhunyadi/kingdomskids?style=social)
+![Stars](https://img.shields.io/github/stars/lhunyadi/kingdomskids?style=social)
+![Forks](https://img.shields.io/github/forks/lhunyadi/kingdomskids?style=social)
 
 </div>
