@@ -1,6 +1,10 @@
-export { Money } from './money';
-export { Globe } from './globe';
-export { Photo } from './photo';
-export { Camera } from './camera';
+export { At } from './at';
+export { Book } from './book';
+export { Briefcase } from './briefcase';
 export { Burger } from './burger';
+export { Chat } from './chat';
+export { Document } from './document';
+export { Music } from './music';
+export { Photo } from './photo';
 export { Search } from './search';
+export { Users } from './users';
