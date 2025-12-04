@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect as Effect, useRef as Ref, useState as State } from 'react';
+import { useEffect as Effect, useState as State } from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { Book, Briefcase, Burger, Chat, Document, Music, Search, Users } from '@/components/icons';
+import { Book, Burger, Chat, Document, Music, Search, User, Users } from '@/components/icons';
 import { Button } from '@/components/ui/button';
 import { Command, Input } from '@/components/ui/command';
 import { Collapsible, Content } from './ui/collapsible';
@@ -28,13 +28,13 @@ export default function Header({ className }: { className?: string }) {
 
   return (
     <header className={cn("w-full", className)}>
-        <div className="mx-auto max-w-7xl p-5">
+        <div className="mx-auto max-w-7xl p-4">
           <Collapsible open={state.burger || state.search}>
             <div className="grid grid-cols-[auto_1fr_auto]">
               <div className={cn(
                   "col-span-3 grid grid-cols-subgrid",
                   "gap-4",
-                  "p-5",
+                  "p-4",
                   "transition-colors duration-300",
                   "bg-transparent hover:bg-gray",
                   state.dropdown ? "bg-gray rounded-t-lg" : "rounded-lg",
@@ -42,8 +42,8 @@ export default function Header({ className }: { className?: string }) {
                 <div className="flex flex-shrink-0 items-center gap-4">
                   <div className="flex-shrink-0">
                     <Button
-                      variant="burger"
-                      size="burger"
+                      variant="icon"
+                      size="icon"
                       onFocus={() => $state(prev => ({ ...prev, burger: true }))}
                       onClick={() => $state(prev => ({ ...prev, burger: true }))}
                       onBlur={() => $state(prev => ({ ...prev, burger: false }))}
@@ -58,7 +58,9 @@ export default function Header({ className }: { className?: string }) {
                       size="logo"
                       asChild
                     >
-                      <a href="/">Kingdom&apos;s Kids</a>
+                      <a href="/">
+                        Kingdom&apos;s Kids
+                      </a>
                     </Button>
                   </div>
                 </div>
@@ -80,14 +82,18 @@ export default function Header({ className }: { className?: string }) {
                       size="tertiary"
                       asChild
                     >
-                      <a href="/testimonies">Testimonies</a>
+                      <a href="/testimonies">
+                        Testimonies
+                      </a>
                     </Button>
                     <Button
                       variant="tertiary"
                       size="tertiary"
                       asChild
                     >
-                      <a href="/gallery">Gallery</a>
+                      <a href="/gallery">
+                        Gallery
+                      </a>
                     </Button>
                   </motion.nav>
 
@@ -129,7 +135,9 @@ export default function Header({ className }: { className?: string }) {
                     size="secondary"
                     asChild
                   >
-                    <a href="/volunteer">Volunteer</a>
+                    <a href="/volunteer">
+                      Volunteer
+                    </a>
                   </Button>
                 </div>
 
@@ -158,38 +166,38 @@ export default function Header({ className }: { className?: string }) {
                   <nav className="col-start-2 grid grid-cols-2 grid-flow-col grid-rows-3 gap-4 pb-4">
                     <Button variant="quaternary" size="quaternary" asChild>
                       <a href="/Lessons" className='group'>
-                        <Book className="w-5 h-5 text-black group-hover:text-orange transition-colors duration-300" />
+                        <Book className="text-black group-hover:text-orange transition-colors duration-300" />
                         Lessons
                       </a>
                     </Button>
                     <Button variant="quaternary" size="quaternary" asChild>
                       <a href="/verses" className='group'>
-                        <Chat className="w-5 h-5 text-black group-hover:text-orange transition-colors duration-300" />
+                        <Chat className="text-black group-hover:text-orange transition-colors duration-300" />
                         Verses
                       </a>
                     </Button>
                     <Button variant="quaternary" size="quaternary" asChild>
                       <a href="/songs" className='group'>
-                        <Music className="w-5 h-5 text-black group-hover:text-orange transition-colors duration-300" />
+                        <Music className="text-black group-hover:text-orange transition-colors duration-300" />
                         Music
                       </a>
                     </Button>
                     <Button variant="quaternary" size="quaternary" asChild>
                       <a href="/games" className="group">
-                        <Users className="w-5 h-5 text-black group-hover:text-orange transition-colors duration-300" />
+                        <Users className="text-black group-hover:text-orange transition-colors duration-300" />
                         Games
                       </a>
                     </Button>
                     <Button variant="quaternary" size="quaternary" asChild>
                       <a href="/resources" className='group'>
-                        <Document className="w-5 h-5 text-black group-hover:text-orange transition-colors duration-300" />
+                        <Document className="text-black group-hover:text-orange transition-colors duration-300" />
                         Resources
                       </a>
                     </Button>
                     <Button variant="quaternary" size="quaternary" asChild>
-                      <a href="/baggage" className='group'>
-                        <Briefcase className="w-5 h-5 text-black group-hover:text-orange transition-colors duration-300" />
-                        Baggage
+                      <a href="/contact" className='group'>
+                        <User className="text-black group-hover:text-orange transition-colors duration-300" />
+                        Contact
                       </a>
                     </Button>
                   </nav>

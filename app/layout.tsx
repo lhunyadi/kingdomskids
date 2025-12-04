@@ -3,6 +3,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Scroll from "@/components/Scroll";
 import Footer from "@/components/Footer";
+import { ThemeProvider as Theme} from "@/components/ThemeProvider";
 
 export const metadata: Metadata = {
   title: "Kingdom's Kids Ministry",
@@ -15,13 +16,15 @@ export default function Layout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className="font-sans antialiased bg-white-off text-black text-md"
+        className="flex flex-col min-h-screen font-sans antialiased bg-white-off text-black text-md"
       >
-        <Header />
-        <Scroll>{children}</Scroll>
-        <Footer />
+        <Theme attribute="class" defaultTheme="light" enableSystem={false}>
+          <Header />
+          <Scroll className="flex-1">{children}</Scroll>
+          <Footer />
+        </Theme>
       </body>
     </html>
   );

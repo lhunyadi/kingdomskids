@@ -43,7 +43,7 @@ const Variants = cva(
           "border border-transparent hover:border-white active:border-white",
           "rounded-lg"
         ],
-        burger: [
+        icon: [
           "text-black hover:text-orange active:text-orange"
         ],
         logo: [
@@ -65,7 +65,7 @@ const Variants = cva(
         quaternary: [
           "px-2.5 py-2.5"
         ],
-        burger: [
+        icon: [
           "p-2.5"
         ],
         logo: [

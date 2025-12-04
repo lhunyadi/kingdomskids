@@ -1,10 +1,12 @@
 export { At } from './at';
 export { Book } from './book';
-export { Briefcase } from './briefcase';
 export { Burger } from './burger';
 export { Chat } from './chat';
 export { Document } from './document';
+export { Moon } from './moon';
 export { Music } from './music';
 export { Photo } from './photo';
 export { Search } from './search';
+export { Sun } from './sun';
+export { User } from './user';
 export { Users } from './users';
