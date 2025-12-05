@@ -96,14 +96,14 @@ export default function Header({ className }: { className?: string }) {
                   <div className="relative flex-1 group">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2
                                       w-5 h-5
-                                      text-black group-hover:text-orange
+                                      text-text group-hover:text-accent
                                       transition-colors duration-300
                                       pointer-events-none z-10" />
                     <Command className="border-0 shadow-none">
                       <Input
                         placeholder="Search"
                         variant="primary"
-                        className="pl-10 hover:bg-background"
+                        className="pl-10"
                         onFocus={() => $state(prev => ({ ...prev, search: true }))}
                         onClick={() => $state(prev => ({ ...prev, search: true }))}
                         onBlur={() => $state(prev => ({ ...prev, search: false }))}
@@ -162,37 +162,37 @@ export default function Header({ className }: { className?: string }) {
                   <nav className="col-start-2 grid grid-cols-2 grid-flow-col grid-rows-3 gap-4 pb-4">
                     <Button variant="quaternary" size="quaternary" asChild>
                       <a href="/Lessons" className='group'>
-                        <Book className="text-black group-hover:text-orange transition-colors duration-300" />
+                        <Book className="text-text group-hover:text-accent transition-colors duration-300" />
                         Lessons
                       </a>
                     </Button>
                     <Button variant="quaternary" size="quaternary" asChild>
                       <a href="/verses" className='group'>
-                        <Chat className="text-black group-hover:text-orange transition-colors duration-300" />
+                        <Chat className="text-text group-hover:text-accent transition-colors duration-300" />
                         Verses
                       </a>
                     </Button>
                     <Button variant="quaternary" size="quaternary" asChild>
                       <a href="/songs" className='group'>
-                        <Music className="text-black group-hover:text-orange transition-colors duration-300" />
+                        <Music className="text-text group-hover:text-accent transition-colors duration-300" />
                         Music
                       </a>
                     </Button>
                     <Button variant="quaternary" size="quaternary" asChild>
                       <a href="/games" className="group">
-                        <Users className="text-black group-hover:text-orange transition-colors duration-300" />
+                        <Users className="text-text group-hover:text-accent transition-colors duration-300" />
                         Games
                       </a>
                     </Button>
                     <Button variant="quaternary" size="quaternary" asChild>
                       <a href="/resources" className='group'>
-                        <Document className="text-black group-hover:text-orange transition-colors duration-300" />
+                        <Document className="text-text group-hover:text-accent transition-colors duration-300" />
                         Resources
                       </a>
                     </Button>
                     <Button variant="quaternary" size="quaternary" asChild>
                       <a href="/contact" className='group'>
-                        <User className="text-black group-hover:text-orange transition-colors duration-300" />
+                        <User className="text-text group-hover:text-accent transition-colors duration-300" />
                         Contact
                       </a>
                     </Button>

@@ -19,14 +19,14 @@ const Variants = cva(
       variant: {
         primary: [
           "font-medium",
-          "text-white hover:text-accent active:text-accent",
+          "text-background hover:text-accent active:text-accent",
           "bg-text hover:bg-transparent active:bg-transparent",
           "border border-text hover:border-accent active:border-accent",
           "rounded-lg"
         ],
         secondary: [
           "font-medium",
-          "text-text hover:text-white active:text-white",
+          "text-text hover:text-background active:text-background",
           "bg-transparent hover:bg-accent active:bg-accent",
           "border border-text hover:border-accent active:border-accent",
           "rounded-lg"
@@ -39,8 +39,8 @@ const Variants = cva(
           "justify-start",
           "font-medium",
           "text-sm text-text",
-          "bg-gray-dark hover:bg-white active:bg-white",
-          "border border-transparent hover:border-white active:border-white",
+          "bg-secondary hover:bg-background active:bg-background",
+          "border border-transparent hover:border-background active:border-background",
           "rounded-lg"
         ],
         icon: [

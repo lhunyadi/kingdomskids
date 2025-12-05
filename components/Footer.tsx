@@ -13,7 +13,7 @@ export default function Footer({ className }: { className?: string }) {
             <Switch variant="icon" size="icon" />
           </div>
         </div>
-        <div className="border-t border-gray">
+        <div className="border-t border-secondary">
           <div className="flex justify-between items-center p-5 text-sm">
             <p>
               &copy; {new Date().getFullYear()} Kingdom's Kids Ministry

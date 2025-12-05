@@ -17,7 +17,7 @@ export default function Layout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="font-sans antialiased text-md">
+      <body className="font-sans text-md">
         <Theme attribute="class" defaultTheme="light" enableSystem={false} storageKey="theme">
           <div className="flex flex-col min-h-screen bg-background text-text">
             <Header />
