@@ -19,37 +19,37 @@ const Variants = cva(
       variant: {
         primary: [
           "font-medium",
-          "text-white hover:text-orange active:text-orange",
-          "bg-black hover:bg-transparent active:bg-transparent",
-          "border border-black hover:border-orange active:border-orange",
+          "text-white hover:text-accent active:text-accent",
+          "bg-text hover:bg-transparent active:bg-transparent",
+          "border border-text hover:border-accent active:border-accent",
           "rounded-lg"
         ],
         secondary: [
           "font-medium",
-          "text-black hover:text-white active:text-white",
-          "bg-transparent hover:bg-orange active:bg-orange",
-          "border border-black hover:border-orange active:border-orange",
+          "text-text hover:text-white active:text-white",
+          "bg-transparent hover:bg-accent active:bg-accent",
+          "border border-text hover:border-accent active:border-accent",
           "rounded-lg"
         ],  
         tertiary: [
           "font-medium",
-          "text-black hover:text-orange active:text-orange"
+          "text-text hover:text-accent active:text-accent"
         ],
         quaternary:[
           "justify-start",
           "font-medium",
-          "text-sm text-black",
+          "text-sm text-text",
           "bg-gray-dark hover:bg-white active:bg-white",
           "border border-transparent hover:border-white active:border-white",
           "rounded-lg"
         ],
         icon: [
-          "text-black hover:text-orange active:text-orange"
+          "text-text hover:text-accent active:text-accent"
         ],
         logo: [
           "font-bold",
-          "text-xl text-black hover:text-orange active:text-orange",
-          "border-y border-black hover:border-orange active:border-orange"
+          "text-xl text-text hover:text-accent active:text-accent",
+          "border-y border-text hover:border-accent active:border-accent"
         ],
       },
       size: {

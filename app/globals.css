@@ -2,14 +2,21 @@
 @import "tw-animate-css";
 
 @theme {
-  --color-white: rgb(255, 255, 255);
-  --color-white-off: rgb(235, 235, 235);
-  --color-gray: rgb(220, 220, 220);
-  --color-gray-dark: rgb(210, 210, 210);
-  --color-black: rgb(35, 35, 35);
-  --color-orange: rgb(250, 150, 50);
+ --color-background: rgb(250, 250, 250);
+ --color-text: rgb(60, 60, 60);
+ --color-primary: rgb(240, 240, 240);
+ --color-secondary: rgb(230, 230, 230);
+ --color-accent: rgb(250, 150, 50);
 
-  --font-sans: 'Bantayog', ui-sans-serif, system-ui, sans-serif;
+ --font-sans: 'Bantayog', ui-sans-serif, system-ui, sans-serif;
+}
+
+.dark {
+ --color-background: rgb(42, 43, 53);
+ --color-text: rgb(255, 255, 255);
+ --color-primary: rgb(90, 91, 99);
+ --color-secondary: rgb(170, 170, 175);
+ --color-accent: rgb(255, 150, 50);
 }
 
 @font-face {

@@ -36,11 +36,10 @@ export default function Header({ className }: { className?: string }) {
                   "gap-4",
                   "p-4",
                   "transition-colors duration-300",
-                  "bg-transparent hover:bg-gray",
-                  state.dropdown ? "bg-gray rounded-t-lg" : "rounded-lg",
+                  "bg-transparent hover:bg-primary",
+                  state.dropdown ? "bg-primary rounded-t-lg" : "rounded-lg",
                 )}>
                 <div className="flex flex-shrink-0 items-center gap-4">
-                  <div className="flex-shrink-0">
                     <Button
                       variant="icon"
                       size="icon"
@@ -50,9 +49,7 @@ export default function Header({ className }: { className?: string }) {
                     >
                       <Burger />
                     </Button>
-                  </div>
 
-                  <div className="flex-shrink-0">
                     <Button
                       variant="logo"
                       size="logo"
@@ -62,7 +59,6 @@ export default function Header({ className }: { className?: string }) {
                         Kingdom&apos;s Kids
                       </a>
                     </Button>
-                  </div>
                 </div>
 
                 <div className={cn(
@@ -107,7 +103,7 @@ export default function Header({ className }: { className?: string }) {
                       <Input
                         placeholder="Search"
                         variant="primary"
-                        className="pl-10"
+                        className="pl-10 hover:bg-background"
                         onFocus={() => $state(prev => ({ ...prev, search: true }))}
                         onClick={() => $state(prev => ({ ...prev, search: true }))}
                         onBlur={() => $state(prev => ({ ...prev, search: false }))}
@@ -160,7 +156,7 @@ export default function Header({ className }: { className?: string }) {
                       $state(prev => ({ ...prev, dropdown: false }));
                     }
                   }}
-                  className="col-span-3 grid grid-cols-subgrid gap-4 overflow-hidden bg-gray rounded-b-lg"
+                  className="col-span-3 grid grid-cols-subgrid gap-4 overflow-hidden bg-primary rounded-b-lg"
                   onMouseDown={(e) => e.preventDefault()}
                 >
                   <nav className="col-start-2 grid grid-cols-2 grid-flow-col grid-rows-3 gap-4 pb-4">

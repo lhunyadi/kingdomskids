@@ -26,9 +26,9 @@ const Variants = cva(
       variant: {
         primary: [
           "font-medium",
-          "text-black placeholder:text-black",
-          "caret-orange selection:bg-orange selection:text-white",
-          "bg-white",
+          "text-text placeholder:text-text",
+          "caret-accent selection:bg-accent selection:text-white",
+          "bg-primary",
           "border border-transparent",
         ],
       },

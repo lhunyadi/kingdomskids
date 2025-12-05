@@ -1,6 +1,7 @@
 "use client"
 
-import { useCallback as Callback, useState as State, useRef as Ref } from "react"
+import { useCallback as Callback, useState as State, useRef as Ref, useEffect as Effect } from "react"
+import { useTheme } from "next-themes"
 import * as Primitive from "@radix-ui/react-switch"
 import { cva, type VariantProps as Props } from "class-variance-authority"
 import { Moon, Sun } from "@/components/icons"
@@ -41,16 +42,22 @@ function Switch({
   size,
   ...props
 }: React.ComponentProps<typeof Primitive.Root> & Props<typeof Variants>) {
-  const [checked, $checked] = State(false)
+  const { theme, setTheme } = useTheme()
+  const [checked, $checked] = State(theme === 'dark')
   const [phase, $phase] = State<Phase>('idle')
   const timeout = Ref<NodeJS.Timeout | null>(null)
+
+  Effect(() => {
+    $checked(theme === 'dark')
+  }, [theme])
 
   const change = Callback((newChecked: boolean) => {
     if (phase !== 'animating') return
     
     $phase('clicked')
     $checked(newChecked)
-  }, [phase])
+    setTheme(newChecked ? 'dark' : 'light')
+  }, [phase, setTheme])
 
   if (variant !== 'icon') {
     return (
