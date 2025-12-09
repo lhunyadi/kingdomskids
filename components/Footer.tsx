@@ -18,7 +18,7 @@ export default function Footer({ className }: { className?: string }) {
             <p>
               &copy; {new Date().getFullYear()} Kingdom's Kids Ministry
             </p>  
-            <div className="flex gap-4 items-center">
+            <nav className="flex gap-4 items-center">
               <Button
                 variant="icon"
                 size="icon"
@@ -44,7 +44,7 @@ export default function Footer({ className }: { className?: string }) {
                     <Instagram/>
                 </a>
               </Button>
-            </div>
+            </nav>
           </div>
         </div>
       </div>

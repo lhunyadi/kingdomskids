@@ -15,7 +15,7 @@ const Variants = cva(
       variant: {
         icon: [
           "inline-flex items-center justify-center",
-          "text-black hover:text-orange",
+          "text-text",
           "outline-none",
           "relative w-5 h-5",
           "[perspective:1000px]",

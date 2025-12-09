@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect as Effect, useState as State } from 'react';
+import { useState as State } from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { Book, Burger, Chat, Document, Music, Search, User, Users } from '@/components/icons';
@@ -14,17 +14,6 @@ export default function Header({ className }: { className?: string }) {
     search: false,
     dropdown: false,
   });
-  
-  Effect(() => {
-    const Escape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && (state.burger || state.search)) {
-        $state(prev => ({ ...prev, burger: false, search: false }));
-      }
-    };
-    
-    document.addEventListener('keydown', Escape);
-    return () => document.removeEventListener('keydown', Escape);
-  }, [state.burger, state.search]);
 
   return (
     <header className={cn("w-full", className)}>
@@ -36,15 +25,14 @@ export default function Header({ className }: { className?: string }) {
                   "gap-4",
                   "p-4",
                   "transition-colors duration-300",
-                  "bg-transparent hover:bg-primary",
+                  "bg-transparent hover:bg-primary group",
                   state.dropdown ? "bg-primary rounded-t-lg" : "rounded-lg",
                 )}>
                 <div className="flex flex-shrink-0 items-center gap-4">
                     <Button
                       variant="icon"
                       size="icon"
-                      onFocus={() => $state(prev => ({ ...prev, burger: true }))}
-                      onClick={() => $state(prev => ({ ...prev, burger: true }))}
+                      onClick={() => $state(prev => ({ ...prev, burger: !prev.burger }))}
                       onBlur={() => $state(prev => ({ ...prev, burger: false }))}
                     >
                       <Burger />
@@ -94,19 +82,20 @@ export default function Header({ className }: { className?: string }) {
                   </motion.nav>
 
                   <div className="relative flex-1 group">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2
-                                      w-5 h-5
-                                      text-text group-hover:text-accent
-                                      transition-colors duration-300
-                                      pointer-events-none z-10" />
                     <Command className="border-0 shadow-none">
                       <Input
                         placeholder="Search"
                         variant="primary"
-                        className="pl-10"
+                        className={cn("pl-10 group-hover:bg-background peer", state.dropdown && "bg-background")}
                         onFocus={() => $state(prev => ({ ...prev, search: true }))}
                         onClick={() => $state(prev => ({ ...prev, search: true }))}
                         onBlur={() => $state(prev => ({ ...prev, search: false }))}
+                      />
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2
+                                         w-5 h-5
+                                         text-text peer-hover:text-accent
+                                         transition-colors duration-300
+                                         pointer-events-none z-10"
                       />
                     </Command>
                   </div>
