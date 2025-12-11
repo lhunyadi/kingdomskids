@@ -12,10 +12,10 @@
 }
 
 .dark {
- --color-background: rgb(42, 43, 53);
- --color-text: rgb(255, 255, 255);
- --color-primary: rgb(90, 91, 99);
- --color-secondary: rgb(170, 170, 175);
+ --color-background: rgb(60, 60, 60);
+ --color-text: rgb(230, 230, 230);
+ --color-primary: rgb(70, 70, 70);
+ --color-secondary: rgb(80, 80, 80);
  --color-accent: rgb(255, 150, 50);
 }
 

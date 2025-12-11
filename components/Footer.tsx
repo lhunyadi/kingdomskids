@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 import { Button } from './ui/button';
-import { Switch } from '@/components/ui/switch';
+import { Theme } from '@/components/ui/theme';
 import { FaFacebookF as Facebook} from 'react-icons/fa';
 import { AiFillInstagram as Instagram } from 'react-icons/ai';
 
@@ -10,7 +10,7 @@ export default function Footer({ className }: { className?: string }) {
       <div className="mx-auto max-w-7xl p-5">
         <div className="flex justify-end items-center p-5">
           <div className="flex justify-end items-center p-2.5">
-            <Switch variant="icon" size="icon" />
+            <Theme/>
           </div>
         </div>
         <div className="border-t border-secondary">

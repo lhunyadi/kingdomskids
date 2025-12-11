@@ -32,7 +32,8 @@ export default function Header({ className }: { className?: string }) {
                     <Button
                       variant="icon"
                       size="icon"
-                      onClick={() => $state(prev => ({ ...prev, burger: !prev.burger }))}
+                      data-burger
+                      onClick={() => $state(prev => prev.search ? ({ ...prev, search: false, burger: false }) : ({ ...prev, burger: !prev.burger }))}
                       onBlur={() => $state(prev => ({ ...prev, burger: false }))}
                     >
                       <Burger />
@@ -84,13 +85,17 @@ export default function Header({ className }: { className?: string }) {
                   <div className="relative flex-1 group">
                     <Command className="border-0 shadow-none">
                       <Input
-                        placeholder="Search"
-                        variant="primary"
-                        className={cn("pl-10 group-hover:bg-background peer", state.dropdown && "bg-background")}
-                        onFocus={() => $state(prev => ({ ...prev, search: true }))}
-                        onClick={() => $state(prev => ({ ...prev, search: true }))}
-                        onBlur={() => $state(prev => ({ ...prev, search: false }))}
-                      />
+                         placeholder="Search"
+                         variant="primary"
+                         className={cn("pl-10 group-hover:bg-background peer", state.dropdown && "bg-background")}
+                         onFocus={() => $state(prev => ({ ...prev, search: true }))}
+                         onClick={() => $state(prev => ({ ...prev, search: true }))}
+                        onBlurCapture={(e) => {
+                          const next = (e.relatedTarget || document.activeElement) as HTMLElement | null;
+                          if (next && (next.closest('[data-dropdown]') || next.closest('[data-burger]'))) return;
+                          $state(prev => ({ ...prev, search: false, burger: false }));
+                        }}
+                       />
                       <Search className="absolute left-3 top-1/2 -translate-y-1/2
                                          w-5 h-5
                                          text-text peer-hover:text-accent
@@ -129,11 +134,11 @@ export default function Header({ className }: { className?: string }) {
               </div>
 
               <Content forceMount asChild>
-                <motion.div
-                  initial={{ height: 0 }}
-                  animate={{ 
-                    height: (state.burger || state.search) ? 'auto' : 0,
-                  }}
+                <motion.div data-dropdown
+                   initial={{ height: 0 }}
+                   animate={{ 
+                     height: (state.burger || state.search) ? 'auto' : 0,
+                   }}
                   transition={{ duration: 0.5, ease: "easeInOut" }}
                   onAnimationStart={() => {
                     if (state.burger || state.search) {
@@ -145,8 +150,9 @@ export default function Header({ className }: { className?: string }) {
                       $state(prev => ({ ...prev, dropdown: false }));
                     }
                   }}
-                  className="col-span-3 grid grid-cols-subgrid gap-4 overflow-hidden bg-primary rounded-b-lg"
                   onMouseDown={(e) => e.preventDefault()}
+                  className="col-span-3 grid grid-cols-subgrid gap-4 overflow-hidden bg-primary rounded-b-lg"
+
                 >
                   <nav className="col-start-2 grid grid-cols-2 grid-flow-col grid-rows-3 gap-4 pb-4">
                     <Button variant="quaternary" size="quaternary" asChild>
