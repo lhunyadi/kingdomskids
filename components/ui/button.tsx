@@ -33,15 +33,23 @@ const Variants = cva(
         ],  
         tertiary: [
           "font-medium",
-          "text-black hover:text-orange active:text-orange",
+          "text-black hover:text-orange active:text-orange"
+        ],
+        quaternary:[
+          "justify-start",
+          "font-medium",
+          "text-sm text-black",
+          "bg-gray-dark hover:bg-white active:bg-white",
+          "border border-transparent hover:border-white active:border-white",
+          "rounded-lg"
         ],
         burger: [
-          "text-black hover:text-orange active:text-orange",
+          "text-black hover:text-orange active:text-orange"
         ],
         logo: [
           "font-bold",
           "text-xl text-black hover:text-orange active:text-orange",
-          "border-y border-black hover:border-orange active:border-orange",
+          "border-y border-black hover:border-orange active:border-orange"
         ],
       },
       size: {
@@ -53,6 +61,9 @@ const Variants = cva(
         ],
         tertiary: [
           "px-5 py-2.5"
+        ],
+        quaternary: [
+          "px-2.5 py-2.5"
         ],
         burger: [
           "p-2.5"
