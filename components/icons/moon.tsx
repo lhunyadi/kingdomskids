@@ -20,7 +20,7 @@ export function Moon({
   className,
   variant,
   ...props
-}: React.SVGProps<SVGSVGElement> & Props<typeof Variants>) {
+}: Readonly<React.SVGProps<SVGSVGElement> & Props<typeof Variants>>) {
   return variant === 'solid' ? (
     <svg
       xmlns="http://www.w3.org/2000/svg"

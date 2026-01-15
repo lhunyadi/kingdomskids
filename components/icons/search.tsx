@@ -1,4 +1,4 @@
-export function Search({ className }: { className?: string }) {
+export function Search({ className }: Readonly<{ className?: string }>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

@@ -1,4 +1,4 @@
-export function Burger({ className }: { className?: string }) {
+export function Burger({ className }: Readonly<{ className?: string }>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

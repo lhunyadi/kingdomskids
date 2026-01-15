@@ -10,3 +10,4 @@ export { Search } from './search';
 export { Sun } from './sun';
 export { User } from './user';
 export { Users } from './users';
+export { X } from './x';

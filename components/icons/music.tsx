@@ -1,4 +1,4 @@
-export function Music({ className }: { className?: string }) {
+export function Music({ className }: Readonly<{ className?: string }>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
