@@ -1,8 +1,8 @@
 ---
-import Drawing from "@/widgets/hero/ui/jesus.svg";
+import Drawing from "@/widgets/propositio/ui/jesus.svg";
 ---
 
-<section data-hero class="bg-background [container-type:inline-size]">
+<section data-propositio class="bg-background [container-type:inline-size]">
   <div data-pin data-lock class="relative grid place-items-center">
     <Drawing
       data-drawing
@@ -16,12 +16,13 @@ import Drawing from "@/widgets/hero/ui/jesus.svg";
       >
         <p
           data-line
-          class="text-[50px] leading-tight font-semibold tracking-tight"
+          class="text-[50px] leading-tight font-semibold tracking-[-0.005em]"
         >
-          <span data-affirmation class="inline-block"
+          <span data-exordium class="inline-block"
             ><span class="text-accent">Jesus</span> said</span
           ><span data-passage
-            >: "Therefore go and make <span class="text-accent">disciples</span>{" "}
+            >: "Therefore go and make <span class="text-accent">disciples</span
+            >{" "}
             of all <span class="text-accent">nations</span>, baptizing them in
             the name of the Father and of the Son and of the Holy Spirit."</span
           >
@@ -39,8 +40,8 @@ import Drawing from "@/widgets/hero/ui/jesus.svg";
 </section>
 
 <script>
-  import { hero } from "@/widgets/hero/model/timeline";
+  import { propositio } from "@/widgets/propositio/model/timeline";
 
-  const root = document.querySelector<HTMLElement>("[data-hero]");
-  if (root) hero(root);
+  const root = document.querySelector<HTMLElement>("[data-propositio]");
+  if (root) propositio(root);
 </script>

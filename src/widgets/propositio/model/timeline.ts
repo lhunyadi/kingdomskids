@@ -7,30 +7,30 @@ import { DrawSVGPlugin as Draw } from "gsap/DrawSVGPlugin";
 gsap.registerPlugin(Trigger, Text, Smoother, Draw);
 
 interface Parts {
-  frame: HTMLElement;
+  stage: HTMLElement;
   line: HTMLElement;
-  affirmation: HTMLElement;
+  exordium: HTMLElement;
   passage: HTMLElement;
   reference: HTMLElement;
   drawing: SVGSVGElement;
 }
 
 function collect(root: HTMLElement): Parts | undefined {
-  const frame = root.querySelector<HTMLElement>("[data-pin]");
+  const stage = root.querySelector<HTMLElement>("[data-pin]");
   const line = root.querySelector<HTMLElement>("[data-line]");
-  const affirmation = root.querySelector<HTMLElement>("[data-affirmation]");
+  const exordium = root.querySelector<HTMLElement>("[data-exordium]");
   const passage = root.querySelector<HTMLElement>("[data-passage]");
   const reference = root.querySelector<HTMLElement>("[data-reference]");
   const drawing = root.querySelector<SVGSVGElement>("[data-drawing]");
 
-  if (!frame || !line || !affirmation || !passage || !reference || !drawing)
+  if (!stage || !line || !exordium || !passage || !reference || !drawing)
     return undefined;
-  return { frame, line, affirmation, passage, reference, drawing };
+  return { stage, line, exordium, passage, reference, drawing };
 }
 
-function centre({ line, affirmation }: Parts) {
-  gsap.set(affirmation, {
-    x: (line.clientWidth - affirmation.offsetWidth) / 2,
+function centre({ line, exordium }: Parts) {
+  gsap.set(exordium, {
+    x: (line.clientWidth - exordium.offsetWidth) / 2,
   });
 }
 
@@ -53,14 +53,14 @@ function fade(words: Element[], done: () => void) {
   );
 }
 
-function greet({ affirmation }: Parts) {
+function greet({ exordium }: Parts) {
   let shown = false;
   const done = () => {
     shown = true;
     Smoother.get()?.paused(false);
   };
 
-  return Text.create(affirmation, {
+  return Text.create(exordium, {
     type: "words",
     aria: "auto",
     autoSplit: true,
@@ -76,9 +76,9 @@ function ordered(drawing: SVGSVGElement) {
 
 const ledge = "top 120px";
 
-function drive(frame: HTMLElement, onSettled: () => void) {
+function drive(stage: HTMLElement, onSettled: () => void) {
   return {
-    trigger: frame,
+    trigger: stage,
     start: ledge,
     end: "+=250%",
     scrub: 1,
@@ -91,14 +91,14 @@ function drive(frame: HTMLElement, onSettled: () => void) {
 }
 
 function sequence(parts: Parts, words: Element[], onSettled: () => void) {
-  const { frame, affirmation, reference, drawing } = parts;
+  const { stage, exordium, reference, drawing } = parts;
 
   return gsap
     .timeline({
       defaults: { ease: "none", duration: 0.5 },
-      scrollTrigger: drive(frame, onSettled),
+      scrollTrigger: drive(stage, onSettled),
     })
-    .to(affirmation, { x: 0, ease: "power2.inOut" })
+    .to(exordium, { x: 0, ease: "power2.inOut" })
     .addLabel("passage")
     .from(words, { yPercent: 100, stagger: { amount: 1 } })
     .from(reference, { yPercent: -100, duration: 1 }, ">-0.1")
@@ -127,12 +127,12 @@ function recite(parts: Parts) {
   });
 }
 
-export function hero(root: HTMLElement) {
+export function propositio(root: HTMLElement) {
   const parts = collect(root);
   if (!parts) return;
 
   Trigger.create({
-    trigger: parts.frame,
+    trigger: parts.stage,
     start: ledge,
     end: "+=250%",
     pin: true,

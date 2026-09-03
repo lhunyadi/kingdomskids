@@ -10,7 +10,7 @@ interface Hues {
   color: string;
 }
 
-interface Skin {
+interface Rest {
   veil: Hues;
   link: string;
 }
@@ -29,7 +29,7 @@ function token(name: string) {
     .trim();
 }
 
-function resting(parts: Parts): Skin {
+function resting(parts: Parts): Rest {
   const [link] = parts.links;
   const style = getComputedStyle(parts.veil);
 
@@ -51,7 +51,7 @@ function dress(parts: Parts, hues: Hues) {
   gsap.set(parts.links, { color: hues.color });
 }
 
-function entry(parts: Parts, rest: Skin) {
+function entry(parts: Parts, rest: Rest) {
   gsap
     .timeline({ defaults: { ease: "power1.inOut" } })
     .to(parts.veil, { yPercent: 0, duration: 1 }, 0)

@@ -98,7 +98,7 @@ function curtain(parts: Parts, dots: HTMLButtonElement[]) {
   const [stadium, circle] = parts.bubbles;
   if (!stadium || !circle) return;
 
-  gsap.set(stadium.element, { "--progress-intro": 0 });
+  gsap.set(stadium.element, { "--intro-progress": 0 });
   const shift = anchor(parts);
 
   hide(parts, dots);
@@ -159,7 +159,7 @@ function land(
     .to(dots, { opacity: 1, duration: 0.1, ease: "power1.in" }, 0.75)
     .to(
       stadium.element,
-      { "--progress-intro": 1, ...paced(200, 20, 0.75) },
+      { "--intro-progress": 1, ...paced(200, 20, 0.75) },
       0.75,
     )
     .to(parts.toggle, { opacity: 1, duration: 0.1, ease: "power1.in" }, 0.95)
@@ -188,7 +188,7 @@ function bloom(parts: Parts, dots: HTMLButtonElement[]) {
   return show;
 }
 
-function frame(nav: HTMLElement) {
+function locate(nav: HTMLElement) {
   return {
     lift: nav.querySelector<HTMLElement>("[data-lift]"),
     seed: nav.querySelector<HTMLElement>("[data-seed]"),
@@ -211,7 +211,7 @@ function pair(nav: HTMLElement) {
 
 function collect(nav: HTMLElement): Parts | undefined {
   const carousel = nav.closest<HTMLElement>("[data-carousel]");
-  const { lift, seed, box, blueprint, toggle } = frame(nav);
+  const { lift, seed, box, blueprint, toggle } = locate(nav);
   const bubbles = pair(nav);
 
   if (!carousel || !lift || !seed) return undefined;

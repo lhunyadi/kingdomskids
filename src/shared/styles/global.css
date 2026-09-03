@@ -33,6 +33,7 @@
     color: var(--color-text);
     font-optical-sizing: auto;
     text-rendering: optimizeLegibility;
+    user-select: none;
   }
 
   :focus-visible {

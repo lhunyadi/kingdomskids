@@ -49,10 +49,9 @@ const skin = `${material} absolute top-1/2 left-1/2 -z-10 h-[50px] w-[50px] roun
     <template data-blueprint>
       <button
         type="button"
-        class="bg-text/50 [&:hover:not([data-active])]:bg-text relative h-[7.5px] w-[7.5px] max-w-[45px] min-w-[calc(37.5px_*_var(--swell)_*_var(--progress-intro,1)_+_7.5px)] cursor-pointer overflow-hidden rounded-[5px] transition-[background-color] duration-[250ms] [--reach:max(var(--span),-1_*_var(--span))] [--span:calc(var(--item-index,0)_-_var(--autoplay-progress,0))] [--swell:max(min(1_-_var(--reach),1),0)] before:absolute before:-inset-[7.5px] before:content-[''] [&[data-active]]:pointer-events-none [&[data-active]]:cursor-default"
+        class="bg-text/50 [&:hover:not([data-active])]:bg-text relative h-[7.5px] w-[7.5px] max-w-[45px] min-w-[calc(37.5px_*_var(--swell)_*_var(--intro-progress,1)_+_7.5px)] cursor-pointer overflow-hidden rounded-[5px] transition-[background-color] duration-[250ms] [--reach:max(var(--span),-1_*_var(--span))] [--span:calc(var(--item-index,0)_-_var(--autoplay-progress,0))] [--swell:max(min(1_-_var(--reach),1),0)] before:absolute before:-inset-[7.5px] before:content-[''] [&[data-active]]:pointer-events-none [&[data-active]]:cursor-default"
       >
         <span
-          data-fill
           class="bg-text absolute top-0 left-0 -ml-[15%] hidden h-full w-0 min-w-[15%] rounded-[5px] [[data-active]_&]:block [[data-active]_&]:[animation:dwell_var(--dwell)_linear_forwards] [[data-beat=paused]_[data-active]_&]:[animation-play-state:paused]"
         ></span>
       </button>
