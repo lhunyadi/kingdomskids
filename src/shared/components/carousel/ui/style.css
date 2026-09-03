@@ -1,5 +1,0 @@
-@property --autoplay-progress {
-  syntax: "<number>";
-  inherits: true;
-  initial-value: 0;
-}

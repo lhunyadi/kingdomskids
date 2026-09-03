@@ -4,12 +4,14 @@ import Confirmatio from "@/widgets/confirmatio/ui/Confirmatio.astro";
 import Refutatio from "@/widgets/refutatio/ui/Refutatio.astro";
 ---
 
-<main class="grid [&>*]:pt-[150px] [&>*]:pb-[200px]">
-  <Propositio />
-
+<main class="grid">
   <div
-    class="grid gap-[120px] bg-[linear-gradient(to_bottom,var(--color-background),var(--color-primary)_150px)]"
+    class="bg-[linear-gradient(to_bottom,var(--color-background),var(--color-primary))] pt-[150px] pb-[200px]"
   >
+    <Propositio />
+  </div>
+
+  <div class="bg-primary grid gap-[120px] pt-[150px] pb-[200px]">
     <Confirmatio />
     <Refutatio />
   </div>

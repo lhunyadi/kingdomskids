@@ -1,223 +1,103 @@
 import gsap from "gsap";
 import { ScrollTrigger as Trigger } from "gsap/ScrollTrigger";
+import { CustomEase as Ease } from "gsap/CustomEase";
 
-gsap.registerPlugin(Trigger);
+gsap.registerPlugin(Trigger, Ease);
 
-interface Spec {
-  stiffness: number;
-  damping: number;
-  duration: number;
-}
+const MIN = 50;
+const GAP = 15;
+const MARGIN = 30;
+const SHIFT = GAP / 2 + MIN / 2;
 
-function overdamped(decay: number) {
-  return (ratio: number) => 1 - Math.exp(-decay * ratio) * (1 + decay * ratio);
-}
+const INACTIVE = "data-inactive";
+const RANGE = "data-range";
+const BUSY = "data-busy";
 
-function underdamped(decay: number, wave: number) {
-  return (ratio: number) =>
+type Curve = (ratio: number) => number;
+
+function damped(mass: number, stiffness: number, damping: number): Curve {
+  const freq = Math.sqrt(stiffness / mass);
+  const zeta = damping / (2 * Math.sqrt(stiffness * mass));
+
+  if (zeta >= 1) {
+    return (ratio) => 1 - (1 + freq * ratio) * Math.exp(-ratio * freq);
+  }
+
+  const wave = freq * Math.sqrt(1 - zeta * zeta);
+  const skew = (zeta * freq) / wave;
+
+  return (ratio) =>
     1 -
-    Math.exp(-decay * ratio) *
-      (Math.cos(wave * ratio) + (decay / wave) * Math.sin(wave * ratio));
+    Math.exp(-ratio * zeta * freq) *
+      (Math.cos(wave * ratio) + skew * Math.sin(wave * ratio));
 }
 
-function curve({ stiffness, damping, duration }: Spec) {
-  const freq = Math.sqrt(stiffness) * duration;
-  const zeta = damping / (2 * Math.sqrt(stiffness));
-  const decay = zeta * freq;
+function settle(solve: Curve) {
+  const step = 1 / 6;
+  let time = 0;
+  let hits = 0;
 
-  if (zeta >= 1) return overdamped(decay);
-  return underdamped(decay, freq * Math.sqrt(1 - zeta * zeta));
+  while (hits < 16) {
+    time += step;
+    hits = solve(time) === 1 ? hits + 1 : 0;
+  }
+
+  return time * step;
 }
 
-function spring(spec: Spec) {
-  const raw = curve(spec);
-  const span = raw(1);
+function spring(mass: number, stiffness: number, damping: number): Curve {
+  const solve = damped(mass, stiffness, damping);
+  const span = settle(solve);
 
-  return (ratio: number) => raw(ratio) / span;
+  return (ratio) => (ratio === 0 || ratio === 1 ? ratio : solve(ratio * span));
 }
 
-function responsive(response: number, bounce: number) {
-  const freq = (2 * Math.PI) / response;
-  const zeta = 1 - bounce;
-
-  return {
-    stiffness: freq * freq,
-    damping: 2 * zeta * freq,
-    duration: (zeta >= 1 ? 9.25 : 6.5) / freq,
-  };
-}
-
-function paced(stiffness: number, damping: number, duration: number) {
-  return { ease: spring({ stiffness, damping, duration }), duration };
-}
-
-function popped(response: number) {
-  const spec = responsive(response, 0);
-  return { ease: spring(spec), duration: spec.duration };
-}
-
-interface Bubble {
-  element: HTMLElement;
-  skin: HTMLElement;
-}
+const SPRING = spring(100, 1, 15);
+const BEZIER = Ease.create("dismiss", "M0,0 C0.8,0 0.4,1 1,1");
 
 interface Parts {
+  nav: HTMLElement;
   lift: HTMLElement;
-  seed: HTMLElement;
+  stadium: HTMLElement;
+  circle: HTMLElement;
+  dots: HTMLElement;
+  icons: HTMLElement;
   carousel: HTMLElement;
-  box: HTMLElement;
   blueprint: HTMLTemplateElement;
   toggle: HTMLElement;
-  bubbles: Bubble[];
 }
 
-function anchor(parts: Parts) {
-  const mid = parts.lift.getBoundingClientRect();
-
-  return parts.bubbles.map((bubble) => {
-    const box = bubble.element.getBoundingClientRect();
-    return mid.left + mid.width / 2 - box.left - box.width / 2;
-  });
+interface Stage {
+  parts: Parts;
+  show: gsap.core.Timeline;
+  hide: gsap.core.Timeline;
 }
 
-function hide(parts: Parts, dots: HTMLButtonElement[]) {
-  gsap.set(parts.lift, { y: 200 });
-  gsap.set(parts.seed, {
-    scale: 1.25,
-    opacity: 0,
-    width: 25,
-    height: 70,
-    xPercent: -50,
-    yPercent: -50,
-  });
-  gsap.set(dots, { x: 35, opacity: 0 });
-  gsap.set(parts.toggle, { opacity: 0, scale: 0.5 });
+function frame(nav: HTMLElement) {
+  const carousel = nav.closest<HTMLElement>("[data-carousel]");
+  const lift = nav.querySelector<HTMLElement>("[data-lift]");
+  const [stadium, circle] = nav.querySelectorAll<HTMLElement>("[data-bubble]");
+
+  if (!carousel || !lift || !stadium || !circle) return undefined;
+  return { nav, carousel, lift, stadium, circle };
 }
 
-function curtain(parts: Parts, dots: HTMLButtonElement[]) {
-  const [stadium, circle] = parts.bubbles;
-  if (!stadium || !circle) return;
+function guts(nav: HTMLElement) {
+  const dots = nav.querySelector<HTMLElement>("[data-dots]");
+  const icons = nav.querySelector<HTMLElement>("[data-icons]");
+  const blueprint = nav.querySelector<HTMLTemplateElement>("[data-blueprint]");
+  const toggle = nav.querySelector<HTMLElement>("[data-toggle]");
 
-  gsap.set(stadium.element, { "--intro-progress": 0 });
-  const shift = anchor(parts);
-
-  hide(parts, dots);
-  parts.bubbles.forEach((bubble, index) => {
-    gsap.set(bubble.element, {
-      x: shift[index] ?? 0,
-      opacity: 0,
-      ["--alpha"]: 0,
-    });
-    gsap.set(bubble.skin, { height: 30 });
-  });
-  gsap.set(stadium.skin, { ["--scale"]: 1.25, width: 35 });
-  gsap.set(circle.skin, { ["--scale"]: 0, width: 70 });
-}
-
-function faces(parts: Parts) {
-  return parts.bubbles.map((bubble) => bubble.element);
-}
-
-function arrive(show: gsap.core.Timeline, parts: Parts) {
-  show
-    .to(parts.lift, { y: 0, ...paced(100, 10, 1.25) }, 0)
-    .set(faces(parts), { opacity: 1 }, 0.025)
-    .set(parts.seed, { opacity: 1 }, 0.025)
-    .to(parts.seed, { scale: 0.75, ...popped(0.25) }, 0.025)
-    .to(parts.seed, { height: 50, ...paced(100, 8, 1.75) }, 0.15)
-    .set(parts.seed, { opacity: 0 }, 0.5);
-}
-
-function spread(show: gsap.core.Timeline, parts: Parts, rest: number) {
-  const [stadium, circle] = parts.bubbles;
-  if (!stadium || !circle) return;
-
-  show
-    .to(stadium.skin, { ["--scale"]: 1, ...popped(0.25) }, 0.25)
-    .to(stadium.element, { x: 0, ...paced(100, 20, 0.95) }, 0.5)
-    .to(stadium.skin, { width: rest, ...paced(100, 10, 1.25) }, 0.5)
-    .to(circle.element, { x: 0, ...paced(100, 20, 0.95) }, 0.55)
-    .to(circle.skin, { ["--scale"]: 1, ...popped(0.65) }, 0.55)
-    .to(stadium.skin, { height: 50, ...paced(100, 10, 1.25) }, 0.75)
-    .to(circle.skin, { width: 50, height: 50, ...paced(100, 10, 1.25) }, 0.75);
-}
-
-function ready(parts: Parts) {
-  parts.carousel.dispatchEvent(new CustomEvent("carousel:ready"));
-}
-
-function land(
-  show: gsap.core.Timeline,
-  parts: Parts,
-  dots: HTMLButtonElement[],
-) {
-  const [stadium] = parts.bubbles;
-  if (!stadium) return;
-
-  show
-    .to(dots, { x: 0, ...paced(200, 20, 0.75), stagger: 0.025 }, 0.75)
-    .to(dots, { opacity: 1, duration: 0.1, ease: "power1.in" }, 0.75)
-    .to(
-      stadium.element,
-      { "--intro-progress": 1, ...paced(200, 20, 0.75) },
-      0.75,
-    )
-    .to(parts.toggle, { opacity: 1, duration: 0.1, ease: "power1.in" }, 0.95)
-    .to(parts.toggle, { scale: 1, duration: 0.25, ease: "power1.out" }, 0.95)
-    .to(faces(parts), { ["--alpha"]: 1, ...paced(100, 20, 0.95) }, 1)
-    .call(() => ready(parts), undefined, 0.85);
-}
-
-function relax(parts: Parts) {
-  gsap.set(parts.lift, { willChange: "auto" });
-}
-
-function bloom(parts: Parts, dots: HTMLButtonElement[]) {
-  const [stadium] = parts.bubbles;
-  const rest = stadium?.element.getBoundingClientRect().width ?? 0;
-
-  curtain(parts, dots);
-
-  const show = gsap.timeline({
-    paused: true,
-    onComplete: () => relax(parts),
-  });
-  arrive(show, parts);
-  spread(show, parts, rest);
-  land(show, parts, dots);
-  return show;
-}
-
-function locate(nav: HTMLElement) {
-  return {
-    lift: nav.querySelector<HTMLElement>("[data-lift]"),
-    seed: nav.querySelector<HTMLElement>("[data-seed]"),
-    box: nav.querySelector<HTMLElement>("[data-dots]"),
-    blueprint: nav.querySelector<HTMLTemplateElement>("[data-blueprint]"),
-    toggle: nav.querySelector<HTMLElement>("[data-toggle]"),
-  };
-}
-
-function pair(nav: HTMLElement) {
-  const bubbles: Bubble[] = [];
-
-  nav.querySelectorAll<HTMLElement>("[data-bubble]").forEach((element) => {
-    const skin = element.querySelector<HTMLElement>("[data-skin]");
-    if (skin) bubbles.push({ element, skin });
-  });
-
-  return bubbles;
+  if (!dots || !icons || !blueprint || !toggle) return undefined;
+  return { dots, icons, blueprint, toggle };
 }
 
 function collect(nav: HTMLElement): Parts | undefined {
-  const carousel = nav.closest<HTMLElement>("[data-carousel]");
-  const { lift, seed, box, blueprint, toggle } = locate(nav);
-  const bubbles = pair(nav);
+  const outer = frame(nav);
+  const inner = guts(nav);
 
-  if (!carousel || !lift || !seed) return undefined;
-  if (!box || !blueprint || !toggle) return undefined;
-  if (bubbles.length < 2) return undefined;
-  return { lift, seed, carousel, box, blueprint, toggle, bubbles };
+  if (!outer || !inner) return undefined;
+  return { ...outer, ...inner };
 }
 
 function send(carousel: HTMLElement, name: string, detail: number) {
@@ -230,19 +110,18 @@ function mint({ carousel, blueprint }: Parts, index: number) {
 
   dot.setAttribute("data-dot", String(index));
   dot.setAttribute("aria-label", `Slide ${index + 1}`);
-  dot.style.setProperty("--item-index", String(index));
   dot.addEventListener("click", () => send(carousel, "carousel:go", index));
   return dot;
 }
 
 function build(parts: Parts) {
   const count = parts.carousel.querySelectorAll("[data-card]").length;
-  const dots = [...Array(count).keys()]
+  const made = [...Array(count).keys()]
     .map((index) => mint(parts, index))
     .filter((dot) => dot !== undefined);
 
-  parts.box.replaceChildren(...dots);
-  return dots;
+  parts.dots.replaceChildren(...made);
+  return made;
 }
 
 function mark(dots: HTMLButtonElement[], carousel: HTMLElement) {
@@ -264,26 +143,220 @@ function follow(parts: Parts, dots: HTMLButtonElement[]) {
   });
 }
 
-function wake(parts: Parts, show: gsap.core.Timeline) {
-  Trigger.create({
-    trigger: parts.carousel,
-    start: "top 35%",
-    once: true,
-    onEnter: () => show.play(),
+function populate(parts: Parts) {
+  const dots = build(parts);
+
+  mark(dots, parts.carousel);
+  follow(parts, dots);
+}
+
+function raise(show: gsap.core.Timeline, parts: Parts) {
+  const drop = parts.lift.offsetHeight + MARGIN;
+
+  show.fromTo(parts.lift, { y: drop }, { y: 0, duration: 0.8, ease: SPRING }, 0);
+}
+
+function pop(show: gsap.core.Timeline, parts: Parts) {
+  const both = [parts.stadium, parts.circle];
+
+  show.fromTo(both, { scale: 0.01 }, { scale: 1, duration: 0.8, ease: SPRING }, 0);
+}
+
+function spread(show: gsap.core.Timeline, parts: Parts, rest: number) {
+  show
+    .fromTo(
+      parts.stadium,
+      { width: MIN, x: 0 },
+      { width: rest, x: -SHIFT, duration: 0.6, ease: SPRING },
+      0.7,
+    )
+    .fromTo(
+      parts.circle,
+      { x: 0 },
+      { x: rest - MIN + SHIFT, duration: 0.6, ease: SPRING },
+      0.7,
+    );
+}
+
+function reveal(show: gsap.core.Timeline, parts: Parts) {
+  const face = [parts.dots, parts.icons];
+
+  show.fromTo(face, { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "none" }, 1);
+}
+
+function conceal(hide: gsap.core.Timeline, parts: Parts) {
+  const face = [parts.dots, parts.icons];
+
+  hide.fromTo(
+    face,
+    { opacity: 1 },
+    { opacity: 0, duration: 0.25, ease: "none" },
+    0,
+  );
+}
+
+function merge(hide: gsap.core.Timeline, parts: Parts, rest: number) {
+  hide
+    .fromTo(
+      parts.stadium,
+      { width: rest, x: -SHIFT },
+      { width: MIN, x: 0, duration: 0.5, ease: BEZIER },
+      0,
+    )
+    .fromTo(
+      parts.circle,
+      { x: rest - MIN + SHIFT },
+      { x: 0, duration: 0.5, ease: BEZIER },
+      0,
+    );
+}
+
+function shrink(hide: gsap.core.Timeline, parts: Parts) {
+  const both = [parts.stadium, parts.circle];
+
+  hide.fromTo(both, { scale: 1 }, { scale: 0.01, duration: 0.5, ease: BEZIER }, 0.5);
+}
+
+function ready(parts: Parts) {
+  if (parts.carousel.hasAttribute("data-ready")) return;
+  parts.carousel.dispatchEvent(new CustomEvent("carousel:ready"));
+}
+
+function stopped() {
+  return gsap.timeline({ paused: true, defaults: { immediateRender: false } });
+}
+
+function opening(parts: Parts, rest: number) {
+  const show = stopped();
+
+  raise(show, parts);
+  pop(show, parts);
+  spread(show, parts, rest);
+  reveal(show, parts);
+  show.call(() => ready(parts), undefined, 1);
+  return show;
+}
+
+function closing(parts: Parts, rest: number) {
+  const hide = stopped();
+
+  conceal(hide, parts);
+  merge(hide, parts, rest);
+  shrink(hide, parts);
+  return hide;
+}
+
+function enter(stage: Stage) {
+  stage.parts.nav.removeAttribute(INACTIVE);
+  stage.hide.pause();
+  stage.show.progress(0, true);
+  stage.show.play();
+}
+
+function leave(stage: Stage) {
+  stage.show.pause();
+  stage.hide.progress(0, true);
+  stage.hide.play();
+}
+
+function settled(stage: Stage) {
+  const { nav } = stage.parts;
+
+  nav.removeAttribute(BUSY);
+  if (nav.hasAttribute(RANGE)) return;
+  nav.setAttribute(BUSY, "");
+  leave(stage);
+}
+
+function cleared(stage: Stage) {
+  const { nav } = stage.parts;
+
+  nav.removeAttribute(BUSY);
+  nav.setAttribute(INACTIVE, "");
+  if (!nav.hasAttribute(RANGE)) return;
+  nav.setAttribute(BUSY, "");
+  enter(stage);
+}
+
+function arrive(stage: Stage) {
+  const { nav } = stage.parts;
+
+  nav.setAttribute(RANGE, "");
+  if (nav.hasAttribute(BUSY)) return;
+  nav.setAttribute(BUSY, "");
+  enter(stage);
+}
+
+function depart(stage: Stage) {
+  const { nav } = stage.parts;
+
+  nav.removeAttribute(RANGE);
+  if (nav.hasAttribute(BUSY)) return;
+  nav.setAttribute(BUSY, "");
+  leave(stage);
+}
+
+function park(stage: Stage) {
+  const { nav } = stage.parts;
+
+  nav.removeAttribute(RANGE);
+  nav.removeAttribute(BUSY);
+  nav.setAttribute(INACTIVE, "");
+  stage.show.pause();
+  stage.hide.pause();
+  stage.show.progress(0, true);
+  stage.hide.progress(1, true);
+}
+
+function stay(stage: Stage) {
+  const zone = Trigger.create({
+    trigger: stage.parts.carousel,
+    start: "60% bottom",
+    end: "bottom 75%",
+    onEnter: () => arrive(stage),
+    onEnterBack: () => arrive(stage),
+    onLeave: () => depart(stage),
+    onLeaveBack: () => depart(stage),
   });
+
+  if (zone.isActive) arrive(stage);
+}
+
+function reset(stage: Stage) {
+  Trigger.create({
+    trigger: stage.parts.carousel,
+    start: "top bottom",
+    end: "bottom top",
+    onLeave: () => park(stage),
+    onLeaveBack: () => park(stage),
+  });
+}
+
+function wire(stage: Stage) {
+  const { parts, show, hide } = stage;
+
+  parts.toggle.addEventListener("click", () =>
+    parts.carousel.dispatchEvent(new CustomEvent("carousel:toggle")),
+  );
+  show.eventCallback("onComplete", () => settled(stage));
+  hide.eventCallback("onComplete", () => cleared(stage));
 }
 
 export function dotnav(nav: HTMLElement) {
   const parts = collect(nav);
   if (!parts) return;
 
-  const dots = build(parts);
+  populate(parts);
 
-  parts.toggle.addEventListener("click", () =>
-    parts.carousel.dispatchEvent(new CustomEvent("carousel:toggle")),
-  );
+  const rest = parts.stadium.getBoundingClientRect().width;
+  const stage: Stage = {
+    parts,
+    show: opening(parts, rest),
+    hide: closing(parts, rest),
+  };
 
-  mark(dots, parts.carousel);
-  follow(parts, dots);
-  wake(parts, bloom(parts, dots));
+  wire(stage);
+  park(stage);
+  stay(stage);
+  reset(stage);
 }

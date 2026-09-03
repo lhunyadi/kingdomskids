@@ -3,53 +3,51 @@ import Pause from "@/shared/components/dotnav/ui/pause.svg";
 import Play from "@/shared/components/dotnav/ui/play.svg";
 
 const material =
-  "bg-[color-mix(in_srgb,color-mix(in_srgb,var(--color-secondary)_35%,var(--color-primary))_calc(100%_-_var(--alpha,0)_*_30%),transparent)] backdrop-blur-[calc(6.25px_*_(2_-_var(--alpha,0)))] [-webkit-backdrop-filter:blur(calc(6.25px_*_(2_-_var(--alpha,0))))]";
-
-const skin = `${material} absolute top-1/2 left-1/2 -z-10 h-[50px] w-[50px] rounded-[25px] [transform:translate(-50%,-50%)_scale(var(--scale,1))]`;
+  "bg-[color-mix(in_srgb,color-mix(in_srgb,var(--color-secondary)_35%,var(--color-primary))_70%,transparent)] backdrop-blur-[6.25px] [-webkit-backdrop-filter:blur(6.25px)]";
 ---
 
-<div data-dotnav class="pointer-events-auto mb-[100px] will-change-transform">
+<div
+  data-dotnav
+  class="pointer-events-auto mb-[100px] will-change-transform [&[data-inactive]]:pointer-events-none [&[data-inactive]]:opacity-0"
+>
   <div
     data-lift
-    class="relative isolate flex items-center justify-center gap-[15px] will-change-transform"
+    class="relative isolate flex items-center will-change-transform"
   >
     <div
-      data-seed
-      class={`${material} absolute top-1/2 left-1/2 h-[70px] w-[25px] rounded-[25px] opacity-0 [--alpha:0]`}
+      data-bubble
+      class={`${material} relative flex h-[50px] items-center rounded-[25px] px-[20px]`}
     >
+      <div data-dots class="flex items-center gap-[15px]"></div>
     </div>
 
     <div
       data-bubble
-      class="relative flex h-[50px] items-center px-[20px] opacity-0 [--alpha:0]"
+      class={`${material} absolute top-0 left-0 h-[50px] w-[50px] rounded-[25px]`}
     >
-      <span data-skin class={skin}></span>
-      <div data-dots class="flex items-center gap-[15px]"></div>
-    </div>
-
-    <div data-bubble class="relative h-[50px] w-[50px] opacity-0 [--alpha:0]">
-      <span data-skin class={skin}></span>
       <button
         data-toggle
         type="button"
         aria-label="Toggle autoplay"
         class="text-text/50 hover:bg-text/5 hover:text-text grid h-full w-full cursor-pointer place-items-center rounded-[25px] transition-[color,background-color] duration-[250ms]"
       >
-        <Pause
-          aria-hidden="true"
-          class="hidden w-[20px] [[data-state=playing]_&]:block"
-        />
-        <Play
-          aria-hidden="true"
-          class="hidden w-[20px] [[data-state=ended]_&]:block [[data-state=paused]_&]:block"
-        />
+        <span data-icons class="grid place-items-center">
+          <Pause
+            aria-hidden="true"
+            class="hidden w-[20px] [[data-state=playing]_&]:block"
+          />
+          <Play
+            aria-hidden="true"
+            class="hidden w-[20px] [[data-state=ended]_&]:block [[data-state=paused]_&]:block"
+          />
+        </span>
       </button>
     </div>
 
     <template data-blueprint>
       <button
         type="button"
-        class="bg-text/50 [&:hover:not([data-active])]:bg-text relative h-[7.5px] w-[7.5px] max-w-[45px] min-w-[calc(37.5px_*_var(--swell)_*_var(--intro-progress,1)_+_7.5px)] cursor-pointer overflow-hidden rounded-[5px] transition-[background-color] duration-[250ms] [--reach:max(var(--span),-1_*_var(--span))] [--span:calc(var(--item-index,0)_-_var(--autoplay-progress,0))] [--swell:max(min(1_-_var(--reach),1),0)] before:absolute before:-inset-[7.5px] before:content-[''] [&[data-active]]:pointer-events-none [&[data-active]]:cursor-default"
+        class="bg-text/50 [&:hover:not([data-active])]:bg-text relative h-[7.5px] w-[7.5px] min-w-[7.5px] cursor-pointer overflow-hidden rounded-[5px] [transition:min-width_400ms_cubic-bezier(0.33,0,0.67,1),background-color_250ms_linear] before:absolute before:-inset-[7.5px] before:content-[''] [&[data-active]]:pointer-events-none [&[data-active]]:min-w-[45px] [&[data-active]]:cursor-default"
       >
         <span
           class="bg-text absolute top-0 left-0 -ml-[15%] hidden h-full w-0 min-w-[15%] rounded-[5px] [[data-active]_&]:block [[data-active]_&]:[animation:dwell_var(--dwell)_linear_forwards] [[data-beat=paused]_[data-active]_&]:[animation-play-state:paused]"
