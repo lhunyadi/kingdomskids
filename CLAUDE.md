@@ -66,6 +66,12 @@ own `pages` name, which Astro has taken. Do not create them before then.
 - No comment banners, no decorative blank lines. Comments explain _why_.
 - Data attributes are behaviour hooks; classes are for styling. Never query
   JavaScript by class name.
+- SCREAMING_CASE for numeric tuning constants; lowercase for selectors,
+  attribute names and eases.
+- **Section rhythm is one symmetric value, halved between like neighbours.** A
+  view's wrappers carry `py-` of a single number. When the next wrapper has the
+  same background, the current one drops to `pt-` only, so the gap is one unit
+  instead of two. A background change is what earns the full gap.
 - Colour tokens are `text`, `background`, `primary`, `secondary`, `accent`.
   Nothing else. Defined in `src/shared/styles/config/global.css`.
 - The font is a subset of SF Pro at `src/shared/styles/config/sf.woff2` — 277
@@ -95,8 +101,10 @@ These cost real debugging time. They are not inferable from the code.
   page carries that attribute, and the widget that owns it must release it.
   A page without it never locks and therefore cannot freeze.
 - **`eslint-plugin-sonarjs` compares Windows drive letters as case-sensitive
-  strings.** The lint hook passes paths relative to the cwd for this reason.
-  Do not "simplify" it back to an absolute path.
+  strings.** `sonarjs/no-skipped-tests` crashes on the absolute paths the lint
+  hook passes, because the file path and its computed topDir disagree on the
+  drive letter's case. It is disabled in `eslint.config.mjs`. Do not re-enable
+  it without checking on Windows.
 - **Mandatory scroll snap eats JS scroll tweens.** A tween writing `scrollLeft`
   on a `scroll-snap-type: x mandatory` container is re-snapped every frame, so
   it jumps instead of animating. Set `scroll-snap-type: none` for the tween and
@@ -117,6 +125,12 @@ These cost real debugging time. They are not inferable from the code.
   attributes. Inventing a second shape for a solved problem is the error, and
   the diff will be missing the parts that made the first one work. Deviating
   is a decision to state out loud, never a default.
+- **Mount a widget the way its siblings are mounted.** The view owns the
+  wrapper, the background and the vertical rhythm; the widget owns its
+  `<section>` and everything inside it. Before adding one to a view, open that
+  view and copy the wrapper the existing widgets sit in — background class and
+  padding included. Arriving without that wrapper is the error, not a
+  simplification.
 - Run `npm run build` after changes. Show the output, do not assert success.
 - The lint hook blocks on `Edit`/`Write` to `.ts`, `.mjs`, `.astro`. Violations
   come back as errors before the user sees the code.

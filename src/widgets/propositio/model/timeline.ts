@@ -69,14 +69,15 @@ function greet({ exordium }: Parts) {
 }
 
 function ordered(drawing: SVGSVGElement) {
-  return [...drawing.querySelectorAll("path")].sort(
-    (first, second) => first.getBBox().y - second.getBBox().y,
-  );
+  return [...drawing.querySelectorAll("path")]
+    .map((path) => ({ path, top: path.getBBox().y }))
+    .sort((first, second) => first.top - second.top)
+    .map((entry) => entry.path);
 }
 
 const ledge = "top 120px";
 
-function drive(stage: HTMLElement, onSettled: () => void) {
+function drive(stage: HTMLElement, onSettled: () => void): ScrollTrigger.Vars {
   return {
     trigger: stage,
     start: ledge,

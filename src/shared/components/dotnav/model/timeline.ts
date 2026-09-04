@@ -4,14 +4,9 @@ import { CustomEase as Ease } from "gsap/CustomEase";
 
 gsap.registerPlugin(Trigger, Ease);
 
-const MIN = 50;
-const GAP = 15;
-const MARGIN = 30;
-const SHIFT = GAP / 2 + MIN / 2;
-
-const INACTIVE = "data-inactive";
-const RANGE = "data-range";
-const BUSY = "data-busy";
+const busy = "data-busy";
+const inactive = "data-inactive";
+const range = "data-range";
 
 type Curve = (ratio: number) => number;
 
@@ -53,7 +48,7 @@ function spring(mass: number, stiffness: number, damping: number): Curve {
 }
 
 const SPRING = spring(100, 1, 15);
-const BEZIER = Ease.create("dismiss", "M0,0 C0.8,0 0.4,1 1,1");
+const dismiss = Ease.create("dismiss", "M0,0 C0.8,0 0.4,1 1,1");
 
 interface Parts {
   nav: HTMLElement;
@@ -151,29 +146,39 @@ function populate(parts: Parts) {
 }
 
 function raise(show: gsap.core.Timeline, parts: Parts) {
-  const drop = parts.lift.offsetHeight + MARGIN;
+  const drop = parts.lift.offsetHeight + 30;
 
-  show.fromTo(parts.lift, { y: drop }, { y: 0, duration: 0.8, ease: SPRING }, 0);
+  show.fromTo(
+    parts.lift,
+    { y: drop },
+    { y: 0, duration: 0.8, ease: SPRING },
+    0,
+  );
 }
 
 function pop(show: gsap.core.Timeline, parts: Parts) {
   const both = [parts.stadium, parts.circle];
 
-  show.fromTo(both, { scale: 0.01 }, { scale: 1, duration: 0.8, ease: SPRING }, 0);
+  show.fromTo(
+    both,
+    { scale: 0.01 },
+    { scale: 1, duration: 0.8, ease: SPRING },
+    0,
+  );
 }
 
 function spread(show: gsap.core.Timeline, parts: Parts, rest: number) {
   show
     .fromTo(
       parts.stadium,
-      { width: MIN, x: 0 },
-      { width: rest, x: -SHIFT, duration: 0.6, ease: SPRING },
+      { width: 50, x: 0 },
+      { width: rest, x: -32.5, duration: 0.6, ease: SPRING },
       0.7,
     )
     .fromTo(
       parts.circle,
       { x: 0 },
-      { x: rest - MIN + SHIFT, duration: 0.6, ease: SPRING },
+      { x: rest - 17.5, duration: 0.6, ease: SPRING },
       0.7,
     );
 }
@@ -181,7 +186,12 @@ function spread(show: gsap.core.Timeline, parts: Parts, rest: number) {
 function reveal(show: gsap.core.Timeline, parts: Parts) {
   const face = [parts.dots, parts.icons];
 
-  show.fromTo(face, { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "none" }, 1);
+  show.fromTo(
+    face,
+    { opacity: 0 },
+    { opacity: 1, duration: 0.5, ease: "none" },
+    1,
+  );
 }
 
 function conceal(hide: gsap.core.Timeline, parts: Parts) {
@@ -199,14 +209,14 @@ function merge(hide: gsap.core.Timeline, parts: Parts, rest: number) {
   hide
     .fromTo(
       parts.stadium,
-      { width: rest, x: -SHIFT },
-      { width: MIN, x: 0, duration: 0.5, ease: BEZIER },
+      { width: rest, x: -32.5 },
+      { width: 50, x: 0, duration: 0.5, ease: dismiss },
       0,
     )
     .fromTo(
       parts.circle,
-      { x: rest - MIN + SHIFT },
-      { x: 0, duration: 0.5, ease: BEZIER },
+      { x: rest - 17.5 },
+      { x: 0, duration: 0.5, ease: dismiss },
       0,
     );
 }
@@ -214,7 +224,12 @@ function merge(hide: gsap.core.Timeline, parts: Parts, rest: number) {
 function shrink(hide: gsap.core.Timeline, parts: Parts) {
   const both = [parts.stadium, parts.circle];
 
-  hide.fromTo(both, { scale: 1 }, { scale: 0.01, duration: 0.5, ease: BEZIER }, 0.5);
+  hide.fromTo(
+    both,
+    { scale: 1 },
+    { scale: 0.01, duration: 0.5, ease: dismiss },
+    0.5,
+  );
 }
 
 function ready(parts: Parts) {
@@ -247,7 +262,7 @@ function closing(parts: Parts, rest: number) {
 }
 
 function enter(stage: Stage) {
-  stage.parts.nav.removeAttribute(INACTIVE);
+  stage.parts.nav.removeAttribute(inactive);
   stage.hide.pause();
   stage.show.progress(0, true);
   stage.show.play();
@@ -262,46 +277,46 @@ function leave(stage: Stage) {
 function settled(stage: Stage) {
   const { nav } = stage.parts;
 
-  nav.removeAttribute(BUSY);
-  if (nav.hasAttribute(RANGE)) return;
-  nav.setAttribute(BUSY, "");
+  nav.removeAttribute(busy);
+  if (nav.hasAttribute(range)) return;
+  nav.setAttribute(busy, "");
   leave(stage);
 }
 
 function cleared(stage: Stage) {
   const { nav } = stage.parts;
 
-  nav.removeAttribute(BUSY);
-  nav.setAttribute(INACTIVE, "");
-  if (!nav.hasAttribute(RANGE)) return;
-  nav.setAttribute(BUSY, "");
+  nav.removeAttribute(busy);
+  nav.setAttribute(inactive, "");
+  if (!nav.hasAttribute(range)) return;
+  nav.setAttribute(busy, "");
   enter(stage);
 }
 
 function arrive(stage: Stage) {
   const { nav } = stage.parts;
 
-  nav.setAttribute(RANGE, "");
-  if (nav.hasAttribute(BUSY)) return;
-  nav.setAttribute(BUSY, "");
+  nav.setAttribute(range, "");
+  if (nav.hasAttribute(busy)) return;
+  nav.setAttribute(busy, "");
   enter(stage);
 }
 
 function depart(stage: Stage) {
   const { nav } = stage.parts;
 
-  nav.removeAttribute(RANGE);
-  if (nav.hasAttribute(BUSY)) return;
-  nav.setAttribute(BUSY, "");
+  nav.removeAttribute(range);
+  if (nav.hasAttribute(busy)) return;
+  nav.setAttribute(busy, "");
   leave(stage);
 }
 
 function park(stage: Stage) {
   const { nav } = stage.parts;
 
-  nav.removeAttribute(RANGE);
-  nav.removeAttribute(BUSY);
-  nav.setAttribute(INACTIVE, "");
+  nav.removeAttribute(range);
+  nav.removeAttribute(busy);
+  nav.setAttribute(inactive, "");
   stage.show.pause();
   stage.hide.pause();
   stage.show.progress(0, true);

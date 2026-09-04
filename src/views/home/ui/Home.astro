@@ -6,13 +6,16 @@ import Refutatio from "@/widgets/refutatio/ui/Refutatio.astro";
 
 <main class="grid">
   <div
-    class="bg-[linear-gradient(to_bottom,var(--color-background),var(--color-primary))] pt-[150px] pb-[200px]"
+    class="bg-[linear-gradient(to_bottom,var(--color-background),var(--color-primary))] py-[150px]"
   >
     <Propositio />
   </div>
 
-  <div class="bg-primary grid gap-[120px] pt-[150px] pb-[200px]">
+  <div class="bg-primary pt-[150px]">
     <Confirmatio />
+  </div>
+
+  <div class="bg-primary pt-[150px]">
     <Refutatio />
   </div>
 </main>

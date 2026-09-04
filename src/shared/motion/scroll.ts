@@ -15,5 +15,8 @@ export function scroll() {
 
   smoother.scrollTop(0);
 
-  if (document.querySelector("[data-lock]")) smoother.paused(true);
+  if (!document.querySelector("[data-lock]")) return;
+
+  smoother.paused(true);
+  gsap.delayedCall(4, () => smoother.paused(false));
 }

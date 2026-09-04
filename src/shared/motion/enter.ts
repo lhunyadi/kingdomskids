@@ -9,7 +9,10 @@ function gather(parts: HTMLElement[]) {
   parts.forEach((part) => {
     const kin = part.parentElement;
     if (!kin) return;
-    families.set(kin, [...(families.get(kin) ?? []), part]);
+
+    const family = families.get(kin);
+    if (family) family.push(part);
+    else families.set(kin, [part]);
   });
 
   return families;

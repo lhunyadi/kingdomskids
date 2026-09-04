@@ -12,13 +12,11 @@ declare global {
   }
 }
 
-const glide = Ease.create("glide", "M0,0 C0,0 0.60,1 1,1");
-const RELEASE = 100;
-const MARGIN = 30;
-const mode = "data-state";
-const playing = "playing";
-const paused = "paused";
 const ended = "ended";
+const glide = Ease.create("glide", "M0,0 C0,0 0.60,1 1,1");
+const mode = "data-state";
+const paused = "paused";
+const playing = "playing";
 const ready = "data-ready";
 
 type Slide = (value: number) => void;
@@ -104,8 +102,7 @@ function idle(parts: Parts) {
 
 function mirror(parts: Parts, beat: gsap.core.Tween) {
   const sync = () => {
-    const gap = parts.gap();
-    const near = String(gap > 0 ? Math.round(parts.track.scrollLeft / gap) : 0);
+    const near = String(spot(parts));
     const was = parts.root.getAttribute("data-current");
 
     if (was === near) return;
@@ -227,9 +224,9 @@ function watch(parts: Parts, beat: gsap.core.Tween) {
 function drift(nav: HTMLElement, box: HTMLElement, slide: Slide) {
   const frame = box.getBoundingClientRect();
   const tall = nav.offsetHeight;
-  const home = frame.bottom - RELEASE - tall;
-  const reach = home - frame.top - MARGIN;
-  const want = window.innerHeight - MARGIN - tall - home;
+  const home = frame.bottom - 100 - tall;
+  const reach = home - frame.top - 30;
+  const want = window.innerHeight - 30 - tall - home;
 
   slide(gsap.utils.clamp(-reach, 0, want));
 }
