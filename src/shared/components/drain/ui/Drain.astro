@@ -1,0 +1,35 @@
+---
+interface Props {
+  text: string;
+}
+
+const { text } = Astro.props;
+
+const type =
+  "w-[87.5cqw] max-w-[1260px] text-center text-[120px] leading-[1.25] font-[800] tracking-[-0.015em]";
+const shade =
+  "bg-[color-mix(in_srgb,var(--color-text)_65%,var(--color-background))]";
+---
+
+<div data-drain class="pointer-events-none grid [grid-area:1/1]">
+  <div
+    data-layer
+    class="bg-secondary grid place-items-center opacity-0 [mix-blend-mode:saturation] [grid-area:1/1]"
+  >
+    <p aria-hidden="true" class:list={[type, "text-accent"]}>
+      {text}
+    </p>
+  </div>
+
+  <div
+    data-layer
+    class:list={[
+      shade,
+      "grid place-items-center opacity-0 [mix-blend-mode:multiply] [grid-area:1/1]",
+    ]}
+  >
+    <p class:list={[type, "text-background"]}>
+      {text}
+    </p>
+  </div>
+</div>

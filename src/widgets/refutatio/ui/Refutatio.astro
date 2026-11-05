@@ -1,4 +1,5 @@
 ---
+import Drain from "@/shared/components/drain/ui/Drain.astro";
 import Grow from "@/shared/components/grow/ui/Grow.astro";
 import Knockout from "@/shared/components/knockout/ui/Knockout.astro";
 import Player from "@/shared/components/player/ui/Player.astro";
@@ -6,7 +7,8 @@ import Player from "@/shared/components/player/ui/Player.astro";
 
 <section data-refutatio>
   <Grow>
-    <Player />
+    <Player src="/stock.mp4" />
+    <Drain text="But why children?" />
     <Knockout text="Jesus said" origin="85% 50%" />
   </Grow>
 </section>
