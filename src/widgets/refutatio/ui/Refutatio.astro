@@ -1,27 +1,14 @@
 ---
+import Grow from "@/shared/components/grow/ui/Grow.astro";
 import Knockout from "@/shared/components/knockout/ui/Knockout.astro";
+import Player from "@/shared/components/player/ui/Player.astro";
 ---
 
-<section data-refutatio class="[container-type:inline-size]">
-  <Knockout text="Jesus said">
-    <figure class="w-[87.5cqw] max-w-[1260px]">
-      <blockquote
-        cite="https://www.biblegateway.com/passage/?search=Matthew%2019%3A13"
-      >
-        <p
-          data-passage
-          class="text-[50px] leading-[1.25] font-[600] tracking-[-0.005em]"
-        >
-          Then people brought little <span data-toy class="text-accent"
-            >children</span
-          > to <span class="text-accent">Jesus</span> for him to place his hands on
-          them and pray for them. But the <span class="text-accent"
-            >disciples</span
-          > rebuked them.
-        </p>
-      </blockquote>
-    </figure>
-  </Knockout>
+<section data-refutatio>
+  <Grow>
+    <Player />
+    <Knockout text="Jesus said" origin="85% 50%" />
+  </Grow>
 </section>
 
 <script>

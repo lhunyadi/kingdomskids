@@ -1,0 +1,48 @@
+---
+import Pause from "@/shared/icons/pause.svg";
+import Play from "@/shared/icons/play.svg";
+
+interface Props {
+  src?: string;
+}
+
+const { src } = Astro.props;
+
+const scrim =
+  "bg-[color-mix(in_srgb,color-mix(in_srgb,var(--color-text)_80%,var(--color-secondary))_70%,transparent)] hover:bg-[color-mix(in_srgb,color-mix(in_srgb,var(--color-text)_75%,var(--color-secondary))_70%,transparent)] active:bg-[color-mix(in_srgb,color-mix(in_srgb,var(--color-text)_85%,var(--color-secondary))_70%,transparent)]";
+---
+
+{
+  src && (
+    <div data-player data-state="paused" class="relative [grid-area:1/1]">
+      <video
+        data-video
+        src={src}
+        muted
+        loop
+        playsinline
+        preload="none"
+        class="absolute inset-0 h-full w-full [scale:var(--zoom,1)] object-cover"
+      />
+
+      <button
+        data-toggle
+        type="button"
+        aria-label="Play video"
+        class:list={[
+          scrim,
+          "text-background/80 hover:text-background absolute top-[20px] right-[20px] z-[5] grid h-[35px] w-[35px] [translate:calc(var(--grow,0)*var(--inset-x,0px)*-1)_calc(var(--grow,0)*var(--inset-y,0px))] cursor-pointer place-items-center rounded-full transition-[scale] duration-[200ms] active:scale-[0.95]",
+        ]}
+      >
+        <Pause
+          aria-hidden="true"
+          class="hidden w-[15px] [[data-state=playing]_&]:block"
+        />
+        <Play
+          aria-hidden="true"
+          class="hidden w-[15px] [[data-state=paused]_&]:block"
+        />
+      </button>
+    </div>
+  )
+}

@@ -1,37 +1,28 @@
 ---
 interface Props {
   text: string;
+  origin: string;
 }
 
-const { text } = Astro.props;
+const { text, origin } = Astro.props;
 ---
 
-<div data-knockout>
-  <div data-pin class="bg-primary grid h-[100svh] overflow-clip">
-    <div data-veil class="isolate grid [grid-area:1/1]">
-      <div class="bg-primary [grid-area:1/1]"></div>
+<div data-knockout class="pointer-events-none grid [grid-area:1/1]">
+  <div
+    class="bg-text grid place-items-center [mix-blend-mode:darken] [grid-area:1/1]"
+  >
+    <p
+      data-mask
+      style={`transform-origin: ${origin}`}
+      class="text-background scale-[400] text-[80px] leading-[1.05] font-[800] tracking-[-0.015em] [will-change:opacity] [text-rendering:geometricPrecision]"
+    >
+      {text}
+    </p>
+  </div>
 
-      <div data-source class="grid place-items-center [grid-area:1/1]">
-        <slot />
-      </div>
-
-      <div
-        class="bg-text grid place-items-center [mix-blend-mode:darken] [grid-area:1/1]"
-      >
-        <p
-          data-mask
-          class="text-background [transform-origin:85%_50%] scale-[400] text-[80px] leading-[1.05] font-[800] tracking-[-0.015em]"
-        >
-          {text}
-        </p>
-      </div>
-    </div>
+  <div
+    data-floor
+    class="bg-text opacity-0 [mix-blend-mode:lighten] [grid-area:1/1]"
+  >
   </div>
 </div>
-
-<script>
-  import { knockout } from "@/shared/components/knockout/model/timeline";
-
-  const roots = document.querySelectorAll<HTMLElement>("[data-knockout]");
-  roots.forEach((root) => knockout(root));
-</script>

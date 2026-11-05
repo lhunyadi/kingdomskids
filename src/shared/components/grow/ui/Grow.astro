@@ -1,0 +1,11 @@
+<div
+  data-grow
+  class="[container-type:inline-size] pointer-events-none mt-[calc(var(--inset-y)*-1)] [--grow:1] [--inset-x:max(6.25cqw,calc((100cqw_-_1260px)/2))] [--inset-y:max(0px,calc((100svh_-_680px)/2))] [--zoom:1] [@media(min-height:760px)]:[--zoom:calc(1_-_var(--grow)*0.1)]"
+>
+  <div
+    data-pin
+    class="bg-background pointer-events-auto isolate grid h-[100svh] overflow-clip [clip-path:inset(calc(var(--grow)*var(--inset-y))_calc(var(--grow)*var(--inset-x))_round_calc(var(--grow)*30px))]"
+  >
+    <slot />
+  </div>
+</div>

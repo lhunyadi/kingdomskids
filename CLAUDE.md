@@ -115,6 +115,19 @@ These cost real debugging time. They are not inferable from the code.
   as ~0.3s of motion and then invisible creep. CSS `ease-out` covers ~68% at the
   same point. The symptom presents as "the duration is wrong", which sends you
   to the wrong knob.
+- **`clip-path` only stops clicks on the element it clips.** Parents and
+  GSAP's pin-spacer keep their full box, stay invisible and swallow clicks on
+  whatever they overlap. Put `pointer-events-none` on the root and
+  `pointer-events-auto` on the clipped element. The symptom only appears where
+  the boxes overlap, which for `Grow` means viewports tall enough to reach the
+  dotnav.
+- **`mix-blend-mode: darken` leaks on a non-black layer.** It takes the lower
+  value per channel, so any video pixel darker than `bg-text` shows through the
+  surround as a faint ghost. `multiply` is worse: it tints all of it. Apple's
+  `#000` avoids this but is not one of our tokens. A second `bg-text` layer in
+  `lighten` raises the surround back to exactly `bg-text`, at the cost of
+  flooring the video's shadows to the same value. It stays invisible with a
+  bright or empty backdrop, so test with a dark frame.
 
 ## Workflow
 
