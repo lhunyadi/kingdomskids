@@ -1,22 +1,18 @@
 import gsap from "gsap";
 import { ScrollTrigger as Trigger } from "gsap/ScrollTrigger";
-import { ScrollSmoother as Smoother } from "gsap/ScrollSmoother";
 
-gsap.registerPlugin(Trigger, Smoother);
+gsap.registerPlugin(Trigger);
+
+export function release() {
+  document.documentElement.style.removeProperty("overflow");
+}
 
 export function scroll() {
   Trigger.clearScrollMemory("manual");
-
-  const smoother = Smoother.create({
-    wrapper: "#smooth-wrapper",
-    content: "#smooth-content",
-    smooth: 1,
-  });
-
-  smoother.scrollTop(0);
+  window.scrollTo(0, 0);
 
   if (!document.querySelector("[data-lock]")) return;
 
-  smoother.paused(true);
-  gsap.delayedCall(4, () => smoother.paused(false));
+  document.documentElement.style.setProperty("overflow", "hidden");
+  gsap.delayedCall(4, release);
 }

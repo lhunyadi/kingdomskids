@@ -3,7 +3,7 @@ import Drawing from "@/widgets/propositio/ui/jesus.svg";
 ---
 
 <section data-propositio class="[container-type:inline-size]">
-  <div data-pin data-lock class="relative grid place-items-center">
+  <div data-stage data-lock class="sticky top-[120px] grid place-items-center">
     <Drawing
       data-drawing
       aria-hidden="true"
@@ -14,11 +14,10 @@ import Drawing from "@/widgets/propositio/ui/jesus.svg";
       <blockquote
         cite="https://www.biblegateway.com/passage/?search=Matthew%2028%3A19"
       >
-        <p
-          data-line
-          class="text-[50px] leading-[1.25] font-[600] tracking-[-0.005em]"
-        >
-          <span data-exordium class="inline-block"
+        <p class="text-[50px] leading-[1.25] font-[600] tracking-[-0.005em]">
+          <span
+            data-exordium
+            class="inline-block [translate:calc(var(--offset)*(min(87.5cqw,1260px)_-_100%)/2)_0] [--offset:1]"
             ><span class="text-accent">Jesus</span> said</span
           ><span data-passage
             >: "Therefore go and make <span class="text-accent">disciples</span
@@ -37,6 +36,8 @@ import Drawing from "@/widgets/propositio/ui/jesus.svg";
       </figcaption>
     </figure>
   </div>
+
+  <div class="h-[250vh]"></div>
 </section>
 
 <script>

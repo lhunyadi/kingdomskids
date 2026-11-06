@@ -30,8 +30,8 @@ They are Uncle Bob's, not defaults: functions ≤20 lines, indent depth ≤2,
 
 - **Astro 7** — no React in phase 1. Add islands only when something needs state.
 - **TypeScript 5.x** — **YOU MUST NOT upgrade to 7.** `@astrojs/check` peer-requires `^5 || ^6`.
-- **GSAP** — ScrollTrigger, ScrollSmoother, SplitText, DrawSVG. All free since
-  Webflow.
+- **GSAP** — ScrollTrigger, SplitText, DrawSVG, CustomEase. All free since
+  Webflow. Scrolling is native: no smoothing library, no GSAP pins.
 - **Tailwind 4** via `@tailwindcss/vite`. There is no `postcss.config`.
 - **Prettier** owns all formatting. Never hand-format.
 
@@ -73,8 +73,8 @@ own `pages` name, which Astro has taken. Do not create them before then.
   same background, the current one drops to `pt-` only, so the gap is one unit
   instead of two. A background change is what earns the full gap.
 - Colour tokens are `text`, `background`, `primary`, `secondary`, `accent`.
-  Nothing else. Defined in `src/shared/styles/config/global.css`.
-- The font is a subset of SF Pro at `src/shared/styles/config/sf.woff2` — 277
+  Nothing else. Defined in `src/shared/styles/global.css`.
+- The font is a subset of SF Pro at `src/shared/styles/sf.woff2` — 277
   glyphs covering English, Romanian and Spanish, weight axis 1–1000, width
   pinned. Regenerating it means re-subsetting, not swapping the file.
 
@@ -93,13 +93,24 @@ These cost real debugging time. They are not inferable from the code.
   instantly on load with no error.
 - **`invalidateOnRefresh` destroys `.from()` tweens.** It re-reads current
   values on refresh, and for a `.from()` at rest "current" is the destination.
-- **`scrub` + `once` can freeze short of the end.** The scrub lags; `once`
-  kills the trigger mid-catch-up. Force `progress(1)` in `onLeave`.
-- **ScrollSmoother is a singleton** and transforms `#smooth-content`. Anything
-  `position: fixed` — the nav, when it exists — must live outside that wrapper.
-- **The scroll lock is opt-in via `data-lock`.** `scroll.ts` pauses only if the
-  page carries that attribute, and the widget that owns it must release it.
-  A page without it never locks and therefore cannot freeze.
+- **Two tweens on one property under `scrub` both read their start at page
+  load.** The second starts from the value at load, not where the first ended,
+  so it jumps and scrolling back breaks. Use one tween with a `CustomEase` that
+  draws the whole curve, as `Drain` does.
+- **Pins are CSS `position: sticky`.** A stage sticks only while its parent has
+  room, so a spacer after it sets the distance, and the trigger reads that
+  distance from the layout (`parent.offsetHeight - stage.offsetHeight`). An
+  ancestor with `overflow: hidden` or `auto` silently kills sticky; `clip` does
+  not. Trigger on the parent, not the stage.
+- **`offsetHeight` rounds up, and a page cannot scroll a fraction.** At a
+  fractional distance (`275vh` of 650px is 1787.5px), a stage that ends the page
+  gets a trigger 1px past the last scrollable pixel, so its timeline stops at
+  99% with no error. Use `end: "bottom bottom"` there. Test at an odd viewport
+  height.
+- **The scroll lock is opt-in via `data-lock`.** `scroll.ts` hides overflow on
+  `html` only if the page carries that attribute, and the widget that owns it
+  must call `release()`. A page without it never locks and therefore cannot
+  freeze. `scrollbar-gutter: stable` stops the page jumping on release.
 - **`eslint-plugin-sonarjs` compares Windows drive letters as case-sensitive
   strings.** `sonarjs/no-skipped-tests` crashes on the absolute paths the lint
   hook passes, because the file path and its computed topDir disagree on the
@@ -115,9 +126,8 @@ These cost real debugging time. They are not inferable from the code.
   as ~0.3s of motion and then invisible creep. CSS `ease-out` covers ~68% at the
   same point. The symptom presents as "the duration is wrong", which sends you
   to the wrong knob.
-- **`clip-path` only stops clicks on the element it clips.** Parents and
-  GSAP's pin-spacer keep their full box, stay invisible and swallow clicks on
-  whatever they overlap. Put `pointer-events-none` on the root and
+- **`clip-path` only stops clicks on the element it clips.** Parents keep
+  their full box, stay invisible and swallow clicks on whatever they overlap. Put `pointer-events-none` on the root and
   `pointer-events-auto` on the clipped element. The symptom only appears where
   the boxes overlap, which for `Grow` means viewports tall enough to reach the
   dotnav.

@@ -1,14 +1,14 @@
 import gsap from "gsap";
 import { ScrollTrigger as Trigger } from "gsap/ScrollTrigger";
 import { SplitText as Text } from "gsap/SplitText";
-import { ScrollSmoother as Smoother } from "gsap/ScrollSmoother";
 import { DrawSVGPlugin as Draw } from "gsap/DrawSVGPlugin";
+import { release } from "@/shared/motion/scroll";
 
-gsap.registerPlugin(Trigger, Text, Smoother, Draw);
+gsap.registerPlugin(Trigger, Text, Draw);
 
 interface Parts {
+  root: HTMLElement;
   stage: HTMLElement;
-  line: HTMLElement;
   exordium: HTMLElement;
   passage: HTMLElement;
   reference: HTMLElement;
@@ -16,22 +16,15 @@ interface Parts {
 }
 
 function collect(root: HTMLElement): Parts | undefined {
-  const stage = root.querySelector<HTMLElement>("[data-pin]");
-  const line = root.querySelector<HTMLElement>("[data-line]");
+  const stage = root.querySelector<HTMLElement>("[data-stage]");
   const exordium = root.querySelector<HTMLElement>("[data-exordium]");
   const passage = root.querySelector<HTMLElement>("[data-passage]");
   const reference = root.querySelector<HTMLElement>("[data-reference]");
   const drawing = root.querySelector<SVGSVGElement>("[data-drawing]");
 
-  if (!stage || !line || !exordium || !passage || !reference || !drawing)
+  if (!stage || !exordium || !passage || !reference || !drawing)
     return undefined;
-  return { stage, line, exordium, passage, reference, drawing };
-}
-
-function centre({ line, exordium }: Parts) {
-  gsap.set(exordium, {
-    x: (line.clientWidth - exordium.offsetWidth) / 2,
-  });
+  return { root, stage, exordium, passage, reference, drawing };
 }
 
 function settle(words: Element[]) {
@@ -57,7 +50,7 @@ function greet({ exordium }: Parts) {
   let shown = false;
   const done = () => {
     shown = true;
-    Smoother.get()?.paused(false);
+    release();
   };
 
   return Text.create(exordium, {
@@ -77,29 +70,24 @@ function ordered(drawing: SVGSVGElement) {
 
 const ledge = "top 120px";
 
-function drive(stage: HTMLElement, onSettled: () => void): ScrollTrigger.Vars {
+function drive({ root, stage }: Parts): ScrollTrigger.Vars {
   return {
-    trigger: stage,
+    trigger: root,
     start: ledge,
-    end: "+=250%",
-    scrub: 1,
-    once: true,
-    onLeave: (self: Trigger) => {
-      self.animation?.progress(1);
-      onSettled();
-    },
+    end: () => `+=${root.offsetHeight - stage.offsetHeight}`,
+    scrub: 0.25,
   };
 }
 
-function sequence(parts: Parts, words: Element[], onSettled: () => void) {
-  const { stage, exordium, reference, drawing } = parts;
+function sequence(parts: Parts, words: Element[]) {
+  const { exordium, reference, drawing } = parts;
 
   return gsap
     .timeline({
       defaults: { ease: "none", duration: 0.5 },
-      scrollTrigger: drive(stage, onSettled),
+      scrollTrigger: drive(parts),
     })
-    .to(exordium, { x: 0, ease: "power2.inOut" })
+    .to(exordium, { "--offset": 0, ease: "power2.inOut" })
     .addLabel("passage")
     .from(words, { yPercent: 100, stagger: { amount: 1 } })
     .from(reference, { yPercent: -100, duration: 1 }, ">-0.1")
@@ -111,33 +99,18 @@ function sequence(parts: Parts, words: Element[], onSettled: () => void) {
 }
 
 function recite(parts: Parts) {
-  let settled = false;
-
   return Text.create(parts.passage, {
     type: "words",
     mask: "words",
     aria: "auto",
     autoSplit: true,
-    onSplit: (self) => {
-      if (!settled) centre(parts);
-
-      return sequence(parts, self.words, () => {
-        settled = true;
-      });
-    },
+    onSplit: (self) => sequence(parts, self.words),
   });
 }
 
 export function propositio(root: HTMLElement) {
   const parts = collect(root);
   if (!parts) return;
-
-  Trigger.create({
-    trigger: parts.stage,
-    start: ledge,
-    end: "+=250%",
-    pin: true,
-  });
 
   greet(parts);
   recite(parts);

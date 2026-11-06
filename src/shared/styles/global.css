@@ -25,6 +25,7 @@
   html {
     scrollbar-width: thin;
     scrollbar-color: var(--color-secondary) transparent;
+    scrollbar-gutter: stable;
   }
 
   body {

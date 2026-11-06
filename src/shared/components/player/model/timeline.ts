@@ -66,6 +66,16 @@ function watch(parts: Parts, range: ScrollTrigger.Vars, held: () => boolean) {
   if (view.isActive) wake();
 }
 
+export function fade(root: HTMLElement) {
+  const select = gsap.utils.selector(root);
+
+  return gsap.to(select("[data-video], [data-toggle]"), {
+    autoAlpha: 0,
+    duration: 15,
+    ease: "none",
+  });
+}
+
 export function player(root: HTMLElement, range: ScrollTrigger.Vars) {
   const parts = collect(root);
   if (!parts) return;
